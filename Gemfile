@@ -5,14 +5,9 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.3'
-# Use postgresql as the database for Active Record
+gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'pg', '~> 0.18'
-
-gem 'dotenv-rails'
-# Use Puma as the app server
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'

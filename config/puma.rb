@@ -1,6 +1,8 @@
 require "dotenv"
 
-Dotenv.load(".env")
+app_dir = File.expand_path("../../", __FILE__)
+
+Dotenv.load("#{app_dir}/.env")
 
 threads_count = ENV['RAILS_MAX_THREADS'] || 5
 threads threads_count, threads_count
