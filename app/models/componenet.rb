@@ -1,0 +1,2 @@
+class Componenet < ApplicationRecord
+end
