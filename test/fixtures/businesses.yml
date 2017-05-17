@@ -1,7 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  jira_name: MyString
   name: MyString
+  price: 9.99
 
 two:
+  jira_name: MyString
   name: MyString
+  price: 9.99
