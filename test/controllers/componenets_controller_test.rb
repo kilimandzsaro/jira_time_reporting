@@ -23,21 +23,6 @@ class ComponenetsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to componenet_url(Componenet.last)
   end
 
-  test "should show componenet" do
-    get componenet_url(@componenet)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_componenet_url(@componenet)
-    assert_response :success
-  end
-
-  test "should update componenet" do
-    patch componenet_url(@componenet), params: { componenet: { name: @componenet.name } }
-    assert_redirected_to componenet_url(@componenet)
-  end
-
   test "should destroy componenet" do
     assert_difference('Componenet.count', -1) do
       delete componenet_url(@componenet)

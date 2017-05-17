@@ -1,5 +1,6 @@
 class ComponenetsController < ApplicationController
-  before_action :set_componenet, only: [:show, :edit, :update, :destroy]
+  before_action :set_componenet, only: [:show, :destroy]
+  include HTTParty
 
   # GET /componenets
   # GET /componenets.json
@@ -7,18 +8,15 @@ class ComponenetsController < ApplicationController
     @componenets = Componenet.all
   end
 
-  # GET /componenets/1
-  # GET /componenets/1.json
-  def show
+  # GET /components/get
+  def get
+    GetJiraResponseService.new("application/json","Base #{ENV['JIRA_BASE64']}")
+    GetJiraResponseService.all_issues("INBT")
   end
 
   # GET /componenets/new
   def new
     @componenet = Componenet.new
-  end
-
-  # GET /componenets/1/edit
-  def edit
   end
 
   # POST /componenets
@@ -32,20 +30,6 @@ class ComponenetsController < ApplicationController
         format.json { render :show, status: :created, location: @componenet }
       else
         format.html { render :new }
-        format.json { render json: @componenet.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /componenets/1
-  # PATCH/PUT /componenets/1.json
-  def update
-    respond_to do |format|
-      if @componenet.update(componenet_params)
-        format.html { redirect_to @componenet, notice: 'Componenet was successfully updated.' }
-        format.json { render :show, status: :ok, location: @componenet }
-      else
-        format.html { render :edit }
         format.json { render json: @componenet.errors, status: :unprocessable_entity }
       end
     end
