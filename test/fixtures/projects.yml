@@ -1,13 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  prefix: MyString
   name: MyString
-  component: MyString
-  business: MyString
-  price: 9.99
 
 two:
+  prefix: MyString
   name: MyString
-  component: MyString
-  business: MyString
-  price: 9.99
