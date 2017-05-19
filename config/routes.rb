@@ -1,10 +1,17 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllert => { :passwords => "users/passwords", :confirmations => "users/confirmations" }
+  devise_for :users => {
+    :registrations => "users/registrations",
+    :sessions => "users/sessions",
+    :passwords => "users/passwords",
+    :confirmations => "users/confirmations"
+  }
+    
   devise_scope :users do
     get 'signup', to: "devise/registrations#new"
     get 'signin', to: "devise/sessions#new"
     delete 'signout', to: "devise/sessions#destroy"
   end
+  
   resources :businesses
   resources :componenets
   get 'static_pages/employee'
