@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <title><%= full_title(yield(:title)) %></title>
     <%= csrf_meta_tags %>
@@ -9,12 +10,22 @@
     <%= render 'layouts/shim' %>
   </head>
 
-  <body>
+  <body class="<%= controller_name %> <%= action_name %>">
     <%= render 'layouts/header' %>
-    <div class="container">
-      <%= yield :sidebar %>
-      <%= yield %>
+    <div class="container-fluid">
+      <% flash.each do |k,v| %>
+        <div class="alert alert-<%= k %> col-md-8 col-md-offset-2 main"><%= v %></div>
+      <% end %>
+      <div class="row">
+        <%= yield :sidebar %>
+        <%= yield %>
+      </div>
+    </div>
+
+    <div class="container">  
       <%= render 'layouts/footer' %>
+      <% debug(params) if Rails.env.development? %> 
     </div>
   </body>
+
 </html>
