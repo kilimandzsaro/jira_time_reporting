@@ -6,7 +6,7 @@ one:
   start_date: 2017-05-18 21:05:46
   end_date: 2017-05-18 21:05:46
   employee_id: 1
-  components_id: 1
+  component_id: 1
   business_id: 1
   duration: 2017-05-18 21:05:46
   project_id: 1
@@ -17,7 +17,7 @@ two:
   start_date: 2017-05-18 21:05:46
   end_date: 2017-05-18 21:05:46
   employee_id: 1
-  components_id: 1
+  component_id: 1
   business_id: 1
   duration: 2017-05-18 21:05:46
   project_id: 1

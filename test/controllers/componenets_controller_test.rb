@@ -22,12 +22,4 @@ class ComponenetsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to componenet_url(Componenet.last)
   end
-
-  test "should destroy componenet" do
-    assert_difference('Componenet.count', -1) do
-      delete componenet_url(@componenet)
-    end
-
-    assert_redirected_to componenets_url
-  end
 end

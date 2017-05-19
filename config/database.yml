@@ -40,10 +40,10 @@ development:
 test:
   <<: *default
   database: jira_time_reporting_test
-  host: <% ENV['DBHOST'] %>
-  database: <% ENV['DBNAME'] %>
-  username: <% ENV['DBUSER'] %>
-  password: <% ENV['DBPW'] %>
+  host: 10.10.1.120
+  database: jira_time_reporting_test
+  username: app_inbank
+  password: lendifybase
 
 production:
   <<: *default

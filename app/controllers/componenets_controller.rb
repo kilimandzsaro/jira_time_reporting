@@ -35,15 +35,15 @@ class ComponenetsController < ApplicationController
     end
   end
 
-  # DELETE /componenets/1
-  # DELETE /componenets/1.json
-  def destroy
-    @componenet.destroy
-    respond_to do |format|
-      format.html { redirect_to componenets_url, notice: 'Componenet was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
+  # # DELETE /componenets/1
+  # # DELETE /componenets/1.json
+  # def destroy
+  #   @componenet.destroy
+  #   respond_to do |format|
+  #     format.html { redirect_to componenets_url, notice: 'Componenet was successfully destroyed.' }
+  #     format.json { head :no_content }
+  #   end
+  # end
 
   private
     # Use callbacks to share common setup or constraints between actions.

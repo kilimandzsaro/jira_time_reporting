@@ -1,0 +1,2 @@
+module IssueHistoryHelper
+end

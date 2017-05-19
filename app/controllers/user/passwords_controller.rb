@@ -28,6 +28,6 @@ class User::PasswordsController < Devise::PasswordsController
 
   # The path used after sending reset password instructions
   def after_sending_reset_password_instructions_path_for(resource_name)
-    signing_path
+    signin_path
   end
 end
