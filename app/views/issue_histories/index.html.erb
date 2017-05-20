@@ -1,0 +1,23 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Issue Histories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @issue_histories.each do |issue_history| %>
+      <tr>
+        <td><%= link_to 'Show', issue_history %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Issue History', new_issue_history_path %>

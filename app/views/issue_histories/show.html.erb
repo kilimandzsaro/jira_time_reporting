@@ -1,0 +1,55 @@
+<p>
+  <strong>Id:</strong>
+  <%= @issue_histories.id %>
+</p>
+
+<p>
+  <strong>Issue:</strong>
+  <%= @issue_history_issue.issue_key %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @issue_histories.status %>
+</p>
+
+<p>
+  <strong>Start date:</strong>
+  <%= @issue_histories.start_date %>
+</p>
+
+<p>
+  <strong>End date:</strong>
+  <%= @issue_histories.end_date %>
+</p>
+
+<p>
+  <strong>Duration:</strong>
+  <%= @issue_histories.duration %>
+</p>
+
+<p>
+  <strong>Assignee:</strong>
+  <%= @issue_histories_employee.name %>
+</p>
+
+<p>
+  <strong>Components:</strong>
+  <% @issue_histories_components.each do |c| %>
+    <%= @c.name %>, 
+  <% end %>
+</p>
+
+<p>
+  <strong>Business:</strong>
+  <% @issue_histories_business.each do |b| %>
+    <%= @b.name %>, 
+  <% end %>
+</p>
+
+<p>
+  <strong>Project:</strong>
+  <%= @issue_histories_project.prefix %>
+</p>
+
+<%= link_to 'Back', issue_histories_path %>

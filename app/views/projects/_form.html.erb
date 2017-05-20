@@ -1,3 +1,4 @@
+
 <%= form_for(project) do |f| %>
   <% if project.errors.any? %>
     <div id="error_explanation">
@@ -17,18 +18,8 @@
   </div>
 
   <div class="field">
-    <%= f.label :component %>
-    <%= f.text_field :component %>
-  </div>
-
-  <div class="field">
-    <%= f.label :business %>
-    <%= f.text_field :business %>
-  </div>
-
-  <div class="field">
-    <%= f.label :price %>
-    <%= f.text_field :price %>
+    <%= f.label :prefix %>
+    <%= f.text_field :prefix %>
   </div>
 
   <div class="actions">

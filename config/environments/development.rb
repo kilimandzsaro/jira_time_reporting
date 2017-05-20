@@ -31,6 +31,22 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  # Default URL for development
+  config.action_mailer.default_options = {from: 'no-reply@projectmeal.com'}
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.default :charset => "utf-8"
+  config.action_mailer.smtp_settings = {
+    address: 'smtp.mailtrap.io',
+    port: 2525, 
+    domain: 'smtp.mailtrap.io',
+    user_name: '286b1b91329f45',
+    password: '84b20f3590edaf',
+    authentication: :cram_md5,
+    enable_starttls_auto: true
+  }
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

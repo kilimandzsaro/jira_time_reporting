@@ -13,7 +13,17 @@
 
   <div class="field">
     <%= f.label :name %>
-    <%= f.text_field :name %>
+    <%= f.text_field :name, :readonly => true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :jira_name %>
+    <%= f.text_field :jira_name, :readonly => true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :price %>
+    <%= f.text_field :price, value: number_to_currency(f.object.price.to_f, delimiter: ' ', unit: '€'), step: :any %>
   </div>
 
   <div class="actions">

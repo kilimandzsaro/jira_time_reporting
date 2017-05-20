@@ -7,7 +7,7 @@ one:
   is_done: false
 
 two:
-  jira_id: 1
-  issue_key: MyString
-  title: MyString
-  is_done: false
+  jira_id: 2
+  issue_key: MyString2
+  title: MyString2
+  is_done: true
