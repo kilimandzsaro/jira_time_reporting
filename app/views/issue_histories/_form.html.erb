@@ -1,0 +1,17 @@
+<%= form_for(issue_history) do |f| %>
+  <% if issue_history.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(issue_history.errors.count, "error") %> prohibited this issue_history from being saved:</h2>
+
+      <ul>
+      <% issue_history.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

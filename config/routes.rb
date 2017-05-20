@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :issue_histories
   devise_for :user, :controllers => {
     :registrations => "user/registrations",
     :sessions => "user/sessions",
@@ -13,14 +14,9 @@ Rails.application.routes.draw do
   end
   
   resources :businesses
-  resources :componenets
-  resources :users
-  get 'static_pages/employee'
-
-  get 'static_pages/project'
-
+  resources :components
   resources :projects
   resources :employees
-  
+  resources :users
   root 'employees#index'
 end

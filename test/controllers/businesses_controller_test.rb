@@ -10,32 +10,22 @@ class BusinessesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get new" do
-    get new_business_url
-    assert_response :success
-  end
-
   test "should create business" do
     assert_difference('Business.count') do
       post businesses_url, params: { business: { name: @business.name, price: @business.price } }
     end
 
-    assert_redirected_to business_url(Business.last)
+    assert_redirected_to businesses_url(Business.last)
   end
 
   test "should show business" do
-    get business_url(@business)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_business_url(@business)
+    get businesses_url(@business)
     assert_response :success
   end
 
   test "should update business" do
-    patch business_url(@business), params: { business: { name: @business.name, price: @business.price } }
-    assert_redirected_to business_url(@business)
+    patch businesses_url(@business), params: { business: { name: @business.name, price: @business.price } }
+    assert_redirected_to businesses_url(@business)
   end
 
 end

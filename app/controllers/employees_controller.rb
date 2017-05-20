@@ -10,6 +10,12 @@ class EmployeesController < ApplicationController
   # GET /employees/1
   # GET /employees/1.json
   def show
+    Employee.find(params[:id]).issue_history_id.each do |ihid| 
+      employee_issues_id.push(IssueHistory.find(ihid).pluck(:issue_id))
+    end
+    employee_issues_id.each do |eiid|
+      @employees_issues.push(Issue.find(eiid))
+    end
   end
 
   # GET /employees/new

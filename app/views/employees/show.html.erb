@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>Name:</strong>
   <%= @employee.name %>
@@ -10,5 +8,11 @@
   <%= @employee.email %>
 </p>
 
-<%= link_to 'Edit', edit_employee_path(@employee) %> |
+<p>
+  <strong>Issues</strong>
+  <% @employee_issues.foreach do |ihid| %>
+    <%= ihid.issue_key %>
+  <% end %>
+</p>
+
 <%= link_to 'Back', employees_path %>

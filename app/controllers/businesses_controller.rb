@@ -12,13 +12,14 @@ class BusinessesController < ApplicationController
   def show
   end
 
-  # GET /businesses/new
-  def new
-    @business = Business.new
+  def new(business)
+    # business = Business.new(XX,YYY)
+    @business = business
   end
 
   # GET /businesses/1/edit
   def edit
+    @business = Business.find(params[:id])
   end
 
   # POST /businesses

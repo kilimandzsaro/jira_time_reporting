@@ -12,12 +12,12 @@ one:
   project_id: 1
 
 two:
-  issue_id: 1
-  status: MyString
+  issue_id: 2
+  status: MyString2
   start_date: 2017-05-18 21:05:46
   end_date: 2017-05-18 21:05:46
-  employee_id: 1
-  component_id: 1
-  business_id: 1
+  employee_id: 2
+  component_id: 2
+  business_id: 2
   duration: 2017-05-18 21:05:46
-  project_id: 1
+  project_id: 2
