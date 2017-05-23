@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
 
   def after_sign_in_path_for(resource)
-    edit_user_path(current_user.id)
+    reports_path
   end
 
   # To permit new custom attributes to be verified as attributes permitted by the form

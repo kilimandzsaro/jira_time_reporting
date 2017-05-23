@@ -1,0 +1,10 @@
+<div class="col-md-7 col-md-offset-3 main">
+  <% provide(:title, "Reports") %>
+  <center><h1>Edit reports</h1></center>
+  <%= form_for(@reports) do |f| %>
+    <%= render 'shared/error_messages' %>
+    <div class="col-md-12">
+      <%= render 'layouts/reports_form', f: f %>
+    </div>
+  <% end %>
+</div>

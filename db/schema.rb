@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170520210307) do
+ActiveRecord::Schema.define(version: 20170523073306) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,9 +32,11 @@ ActiveRecord::Schema.define(version: 20170520210307) do
   create_table "employees", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.integer  "issue_history_id"
+    t.boolean  "hide",             default: false
+    t.string   "status",           default: "active"
     t.index ["issue_history_id"], name: "index_employees_on_issue_history_id", using: :btree
   end
 
@@ -66,6 +68,21 @@ ActiveRecord::Schema.define(version: 20170520210307) do
   create_table "projects", force: :cascade do |t|
     t.string   "prefix"
     t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "report_types", force: :cascade do |t|
+    t.string   "report_type"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "reports", force: :cascade do |t|
+    t.string   "name"
+    t.date     "from_date"
+    t.date     "to_date"
+    t.json     "settings"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
