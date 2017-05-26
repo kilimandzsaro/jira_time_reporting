@@ -23,10 +23,27 @@ class ReportsController < ApplicationController
   def edit
   end
 
+  def get
+    project = "INBT"
+    auth = "bmF0YWxpYS5iYWtvc0BpbmJhbmsuZWU6TGl2ZUBuZGxldGwxdmVUcnVlRnIzZWRvbQ=="
+    connect_to_jira = GetJiraResponseService.new("application/json", "Basic #{auth}")
+
+    components = Array.new
+    components = connect_to_jira.project_components(project)
+
+    c = ComponentsService.new
+    c.add_new_components(components)
+
+    issues = Array.new
+    issues = connect_to_jira.all_issues(project)
+    i = IssuesService.new
+    i.add_new_issues(issues)
+  end
+
   # POST /reports
   # POST /reports.json
   def create
-    @report = Report.new
+    @report = Report.new(report_params)
 
     respond_to do |format|
       if @report.save
@@ -70,11 +87,12 @@ class ReportsController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
+    #  "report"=>{"name"=>"first", "from_date"=>"2017-04-01", "to_date"=>"2017-04-30", "settings"=>["", "32", "", "2", "", ""]}
     def report_params
-      params.require(:report).permit(report: 
-        [:id, :name, :from_date, :to_date, 
-          { settings: [:report_type, {employee_ids: :id}, {component_ids: :id}, {business_ids: :id} ] }
-        ])
+      params.require(:report).permit(:name, :from_date, :to_date, 
+          { settings: 
+            [{report_type: :id}, {employee_ids: :id}, {component_ids: :id}, {business_ids: :id} ] }
+        )
     end
 
     def signed_in_user

@@ -55,4 +55,5 @@ class ComponentsController < ApplicationController
     def component_params
       params.require(:component).permit(:name)
     end
+
 end

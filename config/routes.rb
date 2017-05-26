@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   resources :issues
   resources :report_types, :except => [:show]
-  resources :reports
+  resources :reports do
+    collection do
+      get :get
+    end
+  end
   get 'reports/index'
 
   resources :issue_histories

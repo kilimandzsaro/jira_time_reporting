@@ -9,7 +9,7 @@
   </head>
   <body class="<%= controller_name %> <%= action_name%>">
     <%= render 'layouts/header' %>
-    <div id="wrapper">
+    <div id="wrapper" class="toggled">
         <%= render "layouts/sidebar" %>
         <%= yield (:sidebar) %>
     </div>

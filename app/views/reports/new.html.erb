@@ -18,10 +18,20 @@
       </div>
 
       <div class="field" id="settings">
-        <%= f.collection_check_boxes :report_type, ReportType.all, :id, :report_type, :class => "form-control" %>
-        <%= f.collection_check_boxes :email, Employee.all, :id, :email, :class => "form-control" %>
-        <%= f.collection_check_boxes :name, Component.all, :id, :name, :class => "form-control" %>
-        <%= f.collection_check_boxes :name, Business.all, :id, :name, :class => "form-control" %>
+        <ul>
+          <li>
+            <%= f.collection_check_boxes :settings, ReportType.all, :id, :report_type, {:class => "form-control"} %>
+          </li>
+          <li>
+            <%= f.collection_check_boxes :settings, Employee.all, :id, :email, {:class => "form-control"} %>
+          </li>
+          <li>
+            <%= f.collection_check_boxes :settings, Component.all, :id, :name, {:class => "form-control"} %>
+          </li>
+          <li>
+            <%= f.collection_check_boxes :settings, Business.all, :id, :name, {:class => "form-control"} %>
+          </li>
+        </ul>
       </div>
 
       <div class="actions shared_links" id="submit">

@@ -11,6 +11,12 @@
     <tbody>
       <% @reports.each do |report| %>
         <tr>
+          <td><%= report.name %></td>
+          <td><%= report.from_date %></td>
+          <td><%= report.to_date %></td>
+          <td><%= report.settings %></td>
+        </tr>
+        <tr>
           <td><%= link_to 'Show', report %></td>
           <td><%= link_to 'Edit', edit_report_path(report) %></td>
           <td><%= link_to 'Destroy', report, method: :delete, data: { confirm: 'Are you sure?' } %></td>

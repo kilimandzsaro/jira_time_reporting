@@ -76,7 +76,7 @@
 
 .sidebar-nav li a:hover {
     text-decoration: none;
-    color: #fff;
+    color: #eaeaea;
     background: rgba(255,255,255,0.2);
 }
 
@@ -96,11 +96,11 @@
 }
 
 .sidebar-nav > .sidebar-brand a:hover {
-    color: #fff;
+    color: #eaeaea;
     background: none;
 }
 
-@media(min-width:768px) {
+@media(min-width:767px) {
     #wrapper {
         padding-left: 0;
     }

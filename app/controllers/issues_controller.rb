@@ -71,4 +71,5 @@ class IssuesController < ApplicationController
     def issue_params
       params.fetch(:issue, {})
     end
+
 end
