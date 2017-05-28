@@ -1,9 +1,9 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="container">
-    <%= link_to "jira time reporting", '#', id: "logo" %>
+    <%= link_to "Jira Time Reporting", '#', id: "logo" %>
     <nav>
       <ul class="nav navbar-nav navbar-right">
-        <li><%= link_to "Reports", '#' %></li>
+        <li><%= link_to "Reports", reports_path %></li>
         <li><%= link_to "Settings", '#' %></li>
         <% if signed_in? %>
           <li><%= link_to "Sign out", destroy_user_session_path, method: "delete" %></li>

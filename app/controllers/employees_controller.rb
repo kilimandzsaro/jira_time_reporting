@@ -1,10 +1,11 @@
 class EmployeesController < ApplicationController
-  before_action :set_employee, only: [:show, :edit, :update, :destroy]
+  before_action :set_employee, only: [:show, :edit, :update]
 
   # GET /employees
   # GET /employees.json
   def index
     @employees = Employee.all
+    @show_all = true
   end
 
   # GET /employees/1
@@ -25,6 +26,25 @@ class EmployeesController < ApplicationController
 
   # GET /employees/1/edit
   def edit
+  end
+
+  # PATCH/PUT /employees/1 change the status of the employee
+  def hide_and_show
+    @employee = Employee.find(params[:id])
+
+    @employee.hide = !@employee.hide
+
+    respond_to do |format|
+      if @employee.update_attributes(employee_params["employee"])
+        format.html do
+          redirect_to employees_path
+        end
+        format.json { render json: @employee.to_json}
+      else
+        format.html { render :edit }
+        format.json { render json: @employee.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # POST /employees
@@ -57,16 +77,6 @@ class EmployeesController < ApplicationController
     end
   end
 
-  # DELETE /employees/1
-  # DELETE /employees/1.json
-  def destroy
-    @employee.destroy
-    respond_to do |format|
-      format.html { redirect_to employees_url, notice: 'Employee was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_employee
@@ -75,6 +85,6 @@ class EmployeesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def employee_params
-      params.require(:employee).permit(:name, :email)
+      params.require(:employee).permit(:id, :name, :email, {issue_history: [:id]}, :hide)
     end
 end

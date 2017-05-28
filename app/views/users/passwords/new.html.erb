@@ -1,5 +1,5 @@
-<% provide(:title, "Recover your password") %>
-<div class="col-md-6 col-md-push-3">
+<div class="col-md-7 col-md-push-3 main">
+	<% provide(:title, "Recover your password") %>
 	<center><h1>Forgot your password?</h1></center>
 	<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
 	  <div id="error_explanation" class="col-md-12">

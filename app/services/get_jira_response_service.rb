@@ -3,31 +3,30 @@ class GetJiraResponseService
   require 'json'
   
   include HTTParty
-  base_uri = "#{ENV['JIRA_URL']}/rest/api/2"
+  base_uri = "inbank.atlassian.net/rest/api/2" # "#{ENV['JIRA_URL']}/rest/api/2"
+  default_params :output => 'json'
+  format :json
+
+  attr_accessor :content_type, :authorization, :url
 
   def initialize(content_type, authorization)
-
-  	@options = {
-  	  headers: {
-  		'Content-Type': content_type,
-        'Authorization': authorization	
-  	  }	
-  	}
-
+    self.content_type = content_type
+    self.authorization = authorization
+    self.url = "https://inbank.atlassian.net/rest/api/2"
+    set_header
   end
 
   def all_issues(project)
 
   	total = get_total_results(project)
-  	issues = Array.new(total)
+  	issues = Array.new
   	startAt = 0
   	
     begin
-      response = JSON.parse(self.class.get("/search?jql=project=#{project}&ORDER+BY+KEY+ASC&fields=id,key", @options))
+      response = JSON.parse(self.class.get("#{url}/search?jql=project=#{project}&ORDER+BY+KEY+ASC&fields=id,key&startAt=#{startAt}", @options).to_s)
       
-      response["issues"].each do |issue|
-      	issue_json = JSON.parse(issue)
-      	issues << issue_json["key"]
+      response["issues"].each do |r|
+        issues << {id: r['id'], key: r['key']} if r['id'] != nil
       end
       
       startAt += 50
@@ -41,14 +40,10 @@ class GetJiraResponseService
   def project_components(project)
   	
   	components = Array.new
-  	response = self.class.get("/project/#{project}/components", @options)
-
-  	response.each do |r|
-  	  comp = JSON.parse(r)
-  	  components << comp["name"]
-  	end
-
-    p components
+  	response = JSON.parse(self.class.get("#{url}/project/#{project}/components", @options).to_s)
+    response.each do |r|
+      components << r["name"]
+    end
 
     return components
   end
@@ -56,7 +51,17 @@ class GetJiraResponseService
   private 
 
     def get_total_results(project)
-      response = JSON.parse(self.class.get("/search?jql=project=#{project}&ORDER+BY+KEY+ASC&fields=id,key&maxResults=1", @options))  
-    return response["total"].to_i
+      response = JSON.parse(self.class.get("#{url}/search?jql=project=#{project}&ORDER+BY+KEY+ASC&fields=id,key&maxResults=1", @options).to_s)  
+      return response["total"].to_i
+    end
+
+    def set_header
+      @options = {
+        headers: {
+          'Content-Type': content_type,
+          'Authorization': authorization  
+        } 
+      }
+    end
 
 end

@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  resources :issues
+  resources :report_types, :except => [:show]
+  resources :reports do
+    collection do
+      get :get
+    end
+  end
+  get 'reports/index'
+
   resources :issue_histories
   devise_for :user, :controllers => {
     :registrations => "user/registrations",
@@ -14,9 +23,9 @@ Rails.application.routes.draw do
   end
   
   resources :businesses
-  resources :components
+  resources :components, :except => [:edit, :show, :update, :destroy] 
   resources :projects
-  resources :employees
+  resources :employees, :except => [:destroy]
   resources :users
-  root 'employees#index'
+  root 'reports#index'
 end

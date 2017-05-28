@@ -1,0 +1,3 @@
+<%= f.fields_for :report_types do |r_type| %>
+  <%= r_type.text_field :report_type, value: @report_type.report_type, :class => "form-control" %>
+<% end %>
