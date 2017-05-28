@@ -31,13 +31,14 @@ class ReportsController < ApplicationController
     components = Array.new
     components = connect_to_jira.project_components(project)
 
-    c = ComponentsService.new
-    c.add_new_components(components)
+    cs = ComponentsService.new
+    cs.add_new_components(components)
 
     issues = Array.new
     issues = connect_to_jira.all_issues(project)
-    i = IssuesService.new
-    i.add_new_issues(issues)
+
+    is = IssuesService.new
+    is.add_new_issues(issues)
   end
 
   # POST /reports

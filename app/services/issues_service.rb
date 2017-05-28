@@ -5,9 +5,9 @@ class IssuesService
   
   def add_new_issues(issues)
     issues.each do |i|
-      id = i["id"]
-      key = i["key"]
-      add[id,key]
+      id = i['id']
+      key = i['key']
+      add(id,key)
     end
   end
 
@@ -22,8 +22,8 @@ class IssuesService
   private
   def add(id,key)
     i = Issue.new
-    i.id = id
-    i.key = key
+    i.jira_id = id
+    i.issue_key = key
     i.save
   end
   

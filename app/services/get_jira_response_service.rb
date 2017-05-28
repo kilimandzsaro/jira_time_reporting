@@ -19,14 +19,14 @@ class GetJiraResponseService
   def all_issues(project)
 
   	total = get_total_results(project)
-  	issues = Array.new(total)
+  	issues = Array.new
   	startAt = 0
   	
     begin
       response = JSON.parse(self.class.get("#{url}/search?jql=project=#{project}&ORDER+BY+KEY+ASC&fields=id,key&startAt=#{startAt}", @options).to_s)
       
       response["issues"].each do |r|
-        issues << {id: r["id"], key: r["key"]}
+        issues << {id: r['id'], key: r['key']} if r['id'] != nil
       end
       
       startAt += 50
