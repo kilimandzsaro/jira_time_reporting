@@ -31,8 +31,6 @@ class GetJiraResponseService
       
       startAt += 50
     end while total - startAt > 0
-
-    p issues 
     
     return issues
   end

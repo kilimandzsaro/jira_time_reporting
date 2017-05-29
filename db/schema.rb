@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170526114921) do
+ActiveRecord::Schema.define(version: 20170529065220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,9 +59,9 @@ ActiveRecord::Schema.define(version: 20170526114921) do
     t.integer  "jira_id"
     t.string   "issue_key"
     t.string   "title"
-    t.boolean  "is_done"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.boolean  "is_done",          default: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.integer  "issue_history_id"
     t.index ["issue_history_id"], name: "index_issues_on_issue_history_id", using: :btree
     t.index ["jira_id", "issue_key"], name: "index_issues_on_jira_id_and_issue_key", unique: true, using: :btree

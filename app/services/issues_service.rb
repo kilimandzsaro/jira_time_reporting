@@ -5,8 +5,8 @@ class IssuesService
   
   def add_new_issues(issues)
     issues.each do |i|
-      id = i['id']
-      key = i['key']
+      id = i[:id]
+      key = i[:key]
       add(id,key)
     end
   end
