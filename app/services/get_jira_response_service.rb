@@ -46,6 +46,13 @@ class GetJiraResponseService
     return components
   end
 
+  def issue_history(issue)
+
+    response = JSON.parse(self.class.get("#{url}/issue/#{issue}?expand=changelog", @options).to_s)
+    p "---#{response}"
+    return response
+  end
+
   private 
 
     def get_total_results(project)

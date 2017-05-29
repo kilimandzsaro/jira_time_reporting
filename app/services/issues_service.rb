@@ -12,14 +12,6 @@ class IssuesService
   end
 
   private
-  
-  def add(comp)
-    c = Component.new
-    c.name = comp
-    return unless c.save
-  end
-
-  private
   def add(id,key)
     i = Issue.new
     i.jira_id = id

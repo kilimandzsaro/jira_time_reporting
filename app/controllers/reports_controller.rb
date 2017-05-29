@@ -30,15 +30,15 @@ class ReportsController < ApplicationController
 
     components = Array.new
     components = connect_to_jira.project_components(project)
-
     cs = ComponentsService.new
     cs.add_new_components(components)
 
     issues = Array.new
     issues = connect_to_jira.all_issues(project)
-
     is = IssuesService.new
     is.add_new_issues(issues)
+
+    connect_to_jira.issue_history(Issue.last.issue_key)
   end
 
   # POST /reports
