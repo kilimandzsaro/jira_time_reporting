@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
+  resources :statuses, :except => [:show]
   resources :issues
-  resources :report_types, :except => [:show]
+  resources :report_types, :except => [:show, :edit]
   resources :reports do
     collection do
       get :get

@@ -1,0 +1,3 @@
+<%= f.fields_for :statuses do |status| %>
+  <%= status.text_field :status, value: @status.name, :class => "form-control" %>
+<% end %>
