@@ -1,0 +1,31 @@
+<% if @global_setting.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@global_setting.errors.count, "error") %> prohibited this settings from being saved:</h2>
+
+    <ul>
+    <% @global_setting.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="field">
+  <%= f.label :name %>
+  <%= f.text_field :name, autofocus: true, :class=> "form-control"%>
+</div>
+
+<div class="field">
+  <%= f.label :jira_url %>
+  <%= f.text_field :url, autofocus: true, :class=> "form-control" %>
+</div>
+
+<div class="field">
+  <%= f.label :base64_key %>
+  <%= f.text_field :base64_key, autofocus: true, :class=> "form-control" %>
+</div>
+
+<div class="field">
+  <%= f.label :active %>
+  <%= f.select :active, [['Active', 'true'], ['Inactive', 'false']], :class=> "form-control", autofocus: true %>
+</div>

@@ -1,11 +1,10 @@
 Rails.application.routes.draw do
+  resources :global_settings
   resources :statuses, :except => [:show]
   resources :issues
   resources :report_types, :except => [:show, :edit]
   resources :reports do
-    collection do
-      get :get
-    end
+    get :get
   end
   get 'reports/index'
 
