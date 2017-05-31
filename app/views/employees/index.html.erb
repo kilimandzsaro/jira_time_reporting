@@ -19,7 +19,7 @@
             <td><%= employee.name %></td>
             <td><%= employee.email %></td>
             <td><%= employee.status %></td>
-            <td><%= link_to 'Hide', hide_and_show_employee_path(employee) %></td>
+            <td><%= link_to 'Hide', employee_hide_and_show_path(employee) %></td>
             <td><%= link_to 'Edit', edit_employee_path(employee) %></td>
           </tr>
         <% else %>
@@ -28,9 +28,9 @@
             <td><%= employee.email %></td>
             <td><%= employee.status %></td>
             <% if employee.hide %>
-              <td><%= link_to 'Show', hide_and_show_employee_path(employee) %></td>
+              <td><%= link_to 'Show', employee_hide_and_show_path(employee) %></td>
             <% else %>
-              <td><%= link_to 'Hide', hide_and_show_employee_path(employee) %></td>
+              <td><%= link_to 'Hide', employee_hide_and_show_path(employee) %></td>
             <% end %>
             <td><%= link_to 'Edit', edit_employee_path(employee) %></td>
           </tr>

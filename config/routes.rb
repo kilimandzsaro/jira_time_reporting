@@ -25,8 +25,10 @@ Rails.application.routes.draw do
   
   resources :businesses
   resources :components, :except => [:edit, :show, :update, :destroy] 
-  resources :projects
-  resources :employees, :except => [:destroy]
+  resources :projects, :except => [:show]
+  resources :employees, :except => [:destroy] do
+    get :hide_and_show
+  end
   resources :users
   root 'reports#index'
 end

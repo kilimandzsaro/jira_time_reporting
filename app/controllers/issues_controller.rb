@@ -10,6 +10,7 @@ class IssuesController < ApplicationController
   # GET /issues/1
   # GET /issues/1.json
   def show
+    @issue = Issue.find(params[:id])
   end
 
   # GET /issues/new

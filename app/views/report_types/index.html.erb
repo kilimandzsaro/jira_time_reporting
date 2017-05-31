@@ -14,7 +14,7 @@
       <% @report_types.each do |report_type| %>
         <tr>
           <td><%= report_type.report_type %>
-          <td><%= link_to 'Edit', edit_report_type_path(report_type) %></td>
+          <td><%= link_to 'Edit', report_type_path(report_type) %></td>
           <td><%= link_to 'Destroy', report_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr>
       <% end %>

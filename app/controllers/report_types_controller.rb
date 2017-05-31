@@ -20,7 +20,6 @@ class ReportTypesController < ApplicationController
   # PATCH/PUT /report_types/1
   def update
     @report_type = ReportType.find(params[:id])
-    p "-----#{@report_type}"
     respond_to do |format|
       if @report_type.update_attributes(update_report_type_params["report_types"])
         format.html do
