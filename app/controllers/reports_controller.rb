@@ -38,7 +38,7 @@ class ReportsController < ApplicationController
 
   def get
     report = Report.find(params[:report_id])
-    auth = "bmF0YWxpYS5iYWtvc0BpbmJhbmsuZWU6TGl2ZUBuZGxldGwxdmVUcnVlRnIzZWRvbQ=="
+    auth = GlobalSetting.find_by(active: true).base64_key
     connect_to_jira = GetJiraResponseService.new("application/json", "Basic #{auth}")
 
     report.settings['project_ids'].each do |project|

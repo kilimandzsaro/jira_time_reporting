@@ -3,7 +3,7 @@ class GetJiraResponseService
   require 'json'
   
   include HTTParty
-  base_uri = "inbank.atlassian.net/rest/api/2" # "#{ENV['JIRA_URL']}/rest/api/2"
+  base_uri = GlobalSetting.find_by(active: true).url
   default_params :output => 'json'
   format :json
 
@@ -12,7 +12,7 @@ class GetJiraResponseService
   def initialize(content_type, authorization)
     self.content_type = content_type
     self.authorization = authorization
-    self.url = "https://inbank.atlassian.net/rest/api/2"
+    self.url = GlobalSetting.find_by(active: true).url
     set_header
   end
 
