@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   resources :global_settings
-  resources :statuses, :except => [:show]
+  resources :statuses, :except => [:show, :edit, :update] do
+    collection do
+      get :refresh, to: "statuses#refresh"
+    end
+  end
   resources :issues
   resources :report_types, :except => [:show, :edit]
   resources :reports do

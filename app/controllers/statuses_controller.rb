@@ -1,14 +1,9 @@
 class StatusesController < ApplicationController
-  before_action :set_status, only: [:update, :destroy]
+  # before_action :set_status, only: [:refresh, :destroy]
 
   # GET /statuses
   def index
     @statuses = Status.all
-  end
-
-  # GET /statuses/new
-  def new
-    @status = Status.new
   end
 
   # POST /statuses
@@ -22,19 +17,24 @@ class StatusesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /statuses/1
-  def update
-    if @status.update(status_params)
-      redirect_to @status, notice: 'Status was successfully updated.'
-    else
-      render :edit
+  # GET /statuses#refresh
+  def refresh
+    connect_to_jira = GetJiraResponseService.new
+    statuses = connect_to_jira.statuses
+    statuses.each do |status|
+      if Status.find_by(name: status['name']).nil?
+        s = Status.new
+        s.name = status['name']
+        s.save
+      end
     end
+    redirect_to statuses_path, notice: 'Status was successfully updated'
   end
 
   # DELETE /statuses/1
   def destroy
     @status.destroy
-    redirect_to statuses_url, notice: 'Status was successfully destroyed.'
+    redirect_to statuses_path, notice: 'Status was successfully destroyed.'
   end
 
   private

@@ -9,9 +9,9 @@ class GetJiraResponseService
 
   attr_accessor :content_type, :authorization, :url
 
-  def initialize(content_type, authorization)
-    self.content_type = content_type
-    self.authorization = authorization
+  def initialize
+    self.content_type = "application/json"
+    self.authorization = "Basic #{GlobalSetting.find_by(active: true).base64_key}"
     self.url = GlobalSetting.find_by(active: true).url
     set_header
   end
@@ -42,16 +42,20 @@ class GetJiraResponseService
   	components = Array.new
   	response = JSON.parse(self.class.get("#{url}/project/#{project}/components", @options).to_s)
     response.each do |r|
-      components << r["name"]
+      components << r['name']
     end
 
     return components
   end
 
   def issue_history(issue)
-
     response = JSON.parse(self.class.get("#{url}/issue/#{issue}?expand=changelog", @options).to_s)
     p "---#{response}"
+    return response
+  end
+
+  def statuses
+    response = JSON.parse(self.class.get("#{url}/status", @options).to_s)
     return response
   end
 
@@ -59,7 +63,7 @@ class GetJiraResponseService
 
     def get_total_results(project)
       response = JSON.parse(self.class.get("#{url}/search?jql=project=#{project}&ORDER+BY+KEY+ASC&fields=id,key&maxResults=1", @options).to_s)  
-      return response["total"].to_i
+      return response['total'].to_i
     end
 
     def set_header
