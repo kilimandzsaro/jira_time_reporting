@@ -12,6 +12,12 @@ class ReportsController < ApplicationController
   # GET /reports/1.json
   def show
     @report = Report.find(params[:id])
+    @r_type = @report.settings['report_types']
+    @e_ids = @report.settings['employee_ids']
+    @b_ids = @report.settings['business_ids']
+    @c_ids = @report.settings['component_ids']
+    @p_ids = @report.settings['project_ids']
+    @stat = @report.settings['status_ids']
   end
 
   # GET /reports/new
@@ -21,30 +27,49 @@ class ReportsController < ApplicationController
 
   # GET /reports/1/edit
   def edit
+    @report = Report.find(params[:id])
+    @r_type = @report.settings['report_types']
+    @e_ids = @report.settings['employee_ids']
+    @b_ids = @report.settings['business_ids']
+    @c_ids = @report.settings['component_ids']
+    @p_ids = @report.settings['project_ids']
+    @stat = @report.settings['status_ids']
   end
 
   def get
-    project = "INBT"
+    report = Report.find(params[:report_id])
     auth = "bmF0YWxpYS5iYWtvc0BpbmJhbmsuZWU6TGl2ZUBuZGxldGwxdmVUcnVlRnIzZWRvbQ=="
     connect_to_jira = GetJiraResponseService.new("application/json", "Basic #{auth}")
 
-    components = Array.new
-    components = connect_to_jira.project_components(project)
-    cs = ComponentsService.new
-    cs.add_new_components(components)
+    report.settings['project_ids'].each do |project|
+      components = Array.new
+      components = connect_to_jira.project_components(project)
+      cs = ComponentsService.new
+      cs.add_new_components(components)
 
-    issues = Array.new
-    issues = connect_to_jira.all_issues(project)
-    is = IssuesService.new
-    is.add_new_issues(issues)
+      issues = Array.new
+      issues = connect_to_jira.all_issues(project)
+      is = IssuesService.new
+      is.add_new_issues(issues)
+    end
 
-    connect_to_jira.issue_history(Issue.last.issue_key)
+    Issue.where("is_done = false").each do |i|
+      history = connect_to_jira.issue_history(i.issue_key)
+      h = IssueHistoriesService.new
+      h.process_issue_history(history)
+    end
   end
 
   # POST /reports
   # POST /reports.json
   def create
     @report = Report.new(report_params)
+    @report.settings['report_types'].shift
+    @report.settings['employee_ids'].shift
+    @report.settings['business_ids'].shift
+    @report.settings['component_ids'].shift
+    @report.settings['status_ids'].shift
+    @report.settings['project_ids'].shift
 
     respond_to do |format|
       if @report.save
@@ -60,8 +85,15 @@ class ReportsController < ApplicationController
   # PATCH/PUT /reports/1
   # PATCH/PUT /reports/1.json
   def update
+    @report = Report.find(params[:id])
+    @report.settings['report_types'].shift
+    @report.settings['employee_ids'].shift
+    @report.settings['business_ids'].shift
+    @report.settings['component_ids'].shift
+    @report.settings['status_ids'].shift
+    @report.settings['project_ids'].shift
     respond_to do |format|
-      if @report.update(report_params)
+      if @report.save
         format.html { redirect_to @report, notice: 'Report was successfully updated.' }
         format.json { render :show, status: :ok, location: @report }
       else
@@ -88,12 +120,12 @@ class ReportsController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    #  "report"=>{"name"=>"first", "from_date"=>"2017-04-01", "to_date"=>"2017-04-30", "settings"=>["", "32", "", "2", "", ""]}
     def report_params
-      params.require(:report).permit(:name, :from_date, :to_date, 
-          { settings: 
-            [{report_type: :id}, {employee_ids: :id}, {component_ids: :id}, {business_ids: :id} ] }
-        )
+      # params.require(:report).permit(:name => "", :from_date => "", :to_date => "", 
+      #     :settings =>
+      #       [:report_types, :employee_ids, :component_ids, :business_ids, :status_ids ]
+      #   )
+      params.require(:report).permit!
     end
 
     def signed_in_user

@@ -16,8 +16,9 @@ class GetJiraResponseService
     set_header
   end
 
-  def all_issues(project)
+  def all_issues(project_id)
 
+    project = Project.find(project_id).prefix
   	total = get_total_results(project)
   	issues = Array.new
   	startAt = 0
@@ -25,7 +26,7 @@ class GetJiraResponseService
     begin
       response = JSON.parse(self.class.get("#{url}/search?jql=project=#{project}&ORDER+BY+KEY+ASC&fields=id,key&startAt=#{startAt}", @options).to_s)
       
-      response["issues"].each do |r|
+      response['issues'].each do |r|
         issues << {id: r['id'], key: r['key']} if r['id'] != nil
       end
       
@@ -35,8 +36,9 @@ class GetJiraResponseService
     return issues
   end
 
-  def project_components(project)
+  def project_components(project_id)
   	
+    project = Project.find(project_id).prefix
   	components = Array.new
   	response = JSON.parse(self.class.get("#{url}/project/#{project}/components", @options).to_s)
     response.each do |r|
