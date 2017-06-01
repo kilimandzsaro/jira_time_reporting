@@ -5,7 +5,7 @@ class EmployeesController < ApplicationController
   # GET /employees.json
   def index
     @employees = Employee.all
-    @show_all = true
+    @show_all = false
   end
 
   # GET /employees/1
@@ -19,23 +19,18 @@ class EmployeesController < ApplicationController
     end
   end
 
-  # GET /employees/new
-  def new
-    @employee = Employee.new
-  end
-
   # GET /employees/1/edit
   def edit
   end
 
   # PATCH/PUT /employees/1 change the status of the employee
   def hide_and_show
-    @employee = Employee.find(params[:id])
+    @employee = Employee.find(params[:employee_id])
 
     @employee.hide = !@employee.hide
 
     respond_to do |format|
-      if @employee.update_attributes(employee_params["employee"])
+      if @employee.save
         format.html do
           redirect_to employees_path
         end
@@ -67,6 +62,7 @@ class EmployeesController < ApplicationController
   # PATCH/PUT /employees/1.json
   def update
     respond_to do |format|
+      @employee = Employee.find(params[:employee_id])
       if @employee.update(employee_params)
         format.html { redirect_to @employee, notice: 'Employee was successfully updated.' }
         format.json { render :show, status: :ok, location: @employee }
@@ -75,6 +71,31 @@ class EmployeesController < ApplicationController
         format.json { render json: @employee.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # GET /employees#refresh
+  def refresh
+    connect_to_jira = GetJiraResponseService.new
+    Project.all.each do |project|
+      employees = connect_to_jira.employees(project.prefix)
+      employees.each do |employee|
+        p "----#{employee}"
+        if Employee.find_by_email(employee['emailAddress']).nil?
+          e = Employee.new
+          e.name = employee['name']
+          e.email = employee['emailAddress']
+          e.key = employee['key']
+          e.display_name = employee['displayName']
+          if (employee['active']) 
+            e.status = 'active'
+          else 
+            e.status = 'inactive'
+          end
+          e.save
+        end
+      end
+    end
+    redirect_to employees_path, notice: 'Employees was successfully updated'
   end
 
   private

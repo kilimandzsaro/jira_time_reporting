@@ -7,6 +7,8 @@
         <th>Name</th>
         <th>Email</th>
         <th>Status</th>
+        <th>Jira key</th>
+        <th>Jira display name</th>
         <th>Hide?</th>
         <th colspan="3"></th>
       </tr>
@@ -19,6 +21,8 @@
             <td><%= employee.name %></td>
             <td><%= employee.email %></td>
             <td><%= employee.status %></td>
+            <td><%= employee.key %></td>
+            <td><%= employee.display_name %></td>
             <td><%= link_to 'Hide', employee_hide_and_show_path(employee) %></td>
             <td><%= link_to 'Edit', edit_employee_path(employee) %></td>
           </tr>
@@ -27,6 +31,8 @@
             <td><%= employee.name %></td>
             <td><%= employee.email %></td>
             <td><%= employee.status %></td>
+            <td><%= employee.key %></td>
+            <td><%= employee.display_name %></td>
             <% if employee.hide %>
               <td><%= link_to 'Show', employee_hide_and_show_path(employee) %></td>
             <% else %>
@@ -38,4 +44,5 @@
       <% end %>
     </tbody>
   </table>
+  <td><%= link_to 'Refresh', refresh_employees_path %></td>
 </div>

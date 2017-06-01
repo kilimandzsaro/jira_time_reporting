@@ -59,6 +59,11 @@ class GetJiraResponseService
     return response
   end
 
+  def employees(project)
+    response = JSON.parse(self.class.get("#{url}/user/assignable/search?project=#{project}", @options).to_s)
+    return response
+  end
+
   private 
 
     def get_total_results(project)

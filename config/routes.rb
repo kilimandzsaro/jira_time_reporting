@@ -1,18 +1,33 @@
 Rails.application.routes.draw do
+
   resources :global_settings
+  resources :issues
+  resources :issue_histories
+  resources :businesses
+  resources :users
+
+  resources :report_types, :except => [:show, :edit]
+  resources :components, :except => [:edit, :show, :update, :destroy] 
+  resources :projects, :except => [:show]
+
   resources :statuses, :except => [:show, :edit, :update] do
     collection do
       get :refresh, to: "statuses#refresh"
     end
   end
-  resources :issues
-  resources :report_types, :except => [:show, :edit]
+  
   resources :reports do
     get :get
   end
   get 'reports/index'
 
-  resources :issue_histories
+  resources :employees, :except => [:destroy] do
+    get :hide_and_show
+    collection do
+      get :refresh, to: "employees#refresh"
+    end
+  end
+  
   devise_for :user, :controllers => {
     :registrations => "user/registrations",
     :sessions => "user/sessions",
@@ -26,12 +41,5 @@ Rails.application.routes.draw do
     delete 'signout', to: "user/sessions#destroy"
   end
   
-  resources :businesses
-  resources :components, :except => [:edit, :show, :update, :destroy] 
-  resources :projects, :except => [:show]
-  resources :employees, :except => [:destroy] do
-    get :hide_and_show
-  end
-  resources :users
   root 'reports#index'
 end
