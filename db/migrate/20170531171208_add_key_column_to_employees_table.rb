@@ -4,6 +4,6 @@ class AddKeyColumnToEmployeesTable < ActiveRecord::Migration[5.0]
   end
 
   def down
-    delete_column :employees, :key
+    remove_column :employees, :key
   end
 end

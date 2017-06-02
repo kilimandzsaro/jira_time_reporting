@@ -4,6 +4,6 @@ class AddIssueTypeColumnToIssuesTable < ActiveRecord::Migration[5.0]
   end
 
   def down
-    delete_column :issues, :issue_type
+    remove_column :issues, :issue_type
   end
 end

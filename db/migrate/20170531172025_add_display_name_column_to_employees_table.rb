@@ -4,6 +4,6 @@ class AddDisplayNameColumnToEmployeesTable < ActiveRecord::Migration[5.0]
   end
 
   def down
-    delete_column :employees, :display_name
+    remove_column :employees, :display_name
   end
 end

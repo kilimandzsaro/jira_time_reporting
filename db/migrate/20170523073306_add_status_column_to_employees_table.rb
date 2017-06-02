@@ -4,6 +4,6 @@ class AddStatusColumnToEmployeesTable < ActiveRecord::Migration[5.0]
   end
 
   def down
-    delete_column :employees, :status
+    remove_column :employees, :status
   end
 end
