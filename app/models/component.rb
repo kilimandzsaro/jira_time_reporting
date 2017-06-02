@@ -1,4 +1,5 @@
 class Component < ApplicationRecord
-  has_and_belongs_to_many :issue_histories
+  has_many :components_issues
+  has_many :issues, through: :components_issues
   validates_uniqueness_of :name
 end

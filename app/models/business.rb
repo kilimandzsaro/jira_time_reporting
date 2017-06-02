@@ -1,3 +1,5 @@
 class Business < ApplicationRecord
-  has_and_belongs_to_many :issue_histories
+  has_many :businesses_issues
+  has_many :issues, through: :businesses_issues
+  validates_uniqueness_of :name
 end
