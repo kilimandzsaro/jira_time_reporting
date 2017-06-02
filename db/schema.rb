@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602112341) do
+ActiveRecord::Schema.define(version: 20170602114245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,7 +87,9 @@ ActiveRecord::Schema.define(version: 20170602112341) do
     t.datetime "updated_at",                  null: false
     t.string   "issue_type"
     t.datetime "done_date"
+    t.integer  "project_id"
     t.index ["jira_id_tag", "issue_key"], name: "index_issues_on_jira_id_tag_and_issue_key", unique: true, using: :btree
+    t.index ["project_id"], name: "index_issues_on_project_id", using: :btree
   end
 
   create_table "projects", force: :cascade do |t|
@@ -146,4 +148,5 @@ ActiveRecord::Schema.define(version: 20170602112341) do
   add_foreign_key "businesses_issues", "issues"
   add_foreign_key "components_issues", "components"
   add_foreign_key "components_issues", "issues"
+  add_foreign_key "issues", "projects"
 end

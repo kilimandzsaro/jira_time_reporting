@@ -1,3 +1,3 @@
 class Project < ApplicationRecord
-  has_many :issue_histories
+  has_many :issues
 end
