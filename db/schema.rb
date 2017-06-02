@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602074509) do
+ActiveRecord::Schema.define(version: 20170602094639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,14 +33,12 @@ ActiveRecord::Schema.define(version: 20170602074509) do
   create_table "employees", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.integer  "issue_history_id"
-    t.boolean  "hide",             default: false
-    t.string   "status",           default: "active"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "hide",         default: false
+    t.string   "status",       default: "active"
     t.string   "key"
     t.string   "display_name"
-    t.index ["issue_history_id"], name: "index_employees_on_issue_history_id", using: :btree
   end
 
   create_table "global_settings", force: :cascade do |t|
@@ -55,30 +53,28 @@ ActiveRecord::Schema.define(version: 20170602074509) do
 
   create_table "issue_histories", force: :cascade do |t|
     t.integer  "issue_id"
-    t.string   "status"
     t.datetime "start_date"
     t.datetime "end_date"
     t.integer  "employee_id"
-    t.integer  "component_id"
-    t.integer  "business_id"
     t.time     "duration"
     t.integer  "project_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "history_id"
+    t.integer  "status_id"
+    t.integer  "component_ids", default: [],              array: true
+    t.integer  "business_ids",  default: [],              array: true
   end
 
   create_table "issues", force: :cascade do |t|
     t.integer  "jira_id"
     t.string   "issue_key"
     t.string   "title"
-    t.boolean  "is_done",          default: false
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-    t.integer  "issue_history_id"
+    t.boolean  "is_done",    default: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.string   "issue_type"
     t.datetime "done_date"
-    t.index ["issue_history_id"], name: "index_issues_on_issue_history_id", using: :btree
     t.index ["jira_id", "issue_key"], name: "index_issues_on_jira_id_and_issue_key", unique: true, using: :btree
   end
 
