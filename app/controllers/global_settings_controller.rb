@@ -32,6 +32,33 @@ class GlobalSettingsController < ApplicationController
     end
   end
 
+  def get
+    auth = GlobalSetting.find_by_active(true).base64_key
+    connect_to_jira = GetJiraResponseService.new
+
+    Project.all.each do |project|
+      components = Array.new
+      components = connect_to_jira.project_components(project.id)
+      cs = ComponentsService.new
+      cs.add_new_components(components)
+
+      issues = Array.new
+      issues = connect_to_jira.all_issues(project.id)
+      is = IssuesService.new
+      is.add_new_issues(issues)
+    end
+
+    Issue.all.each do |i|
+      history = connect_to_jira.issue_history(i.issue_key)
+      h = IssueHistoriesService.new(history)
+      h.process_issue_history
+    end
+
+    calculate_duration
+
+    redirect_to global_settings_path
+  end
+
   # PATCH/PUT /global_settings/1
   def update
     if @global_setting.update(global_setting_params)
@@ -48,6 +75,15 @@ class GlobalSettingsController < ApplicationController
   end
 
   private
+    def calculate_duration
+      IssueHistory.where("end_date IS NOT NULL").each do |ih|
+        duration = Time.at(ih.start_date.business_time_until(ih.end_date)).utc.strftime("%H:%M:%S")
+        if ih.duration != duration
+          ih.duration = duration
+          ih.save!
+        end
+      end
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_global_setting
       @global_setting = GlobalSetting.find(params[:id])

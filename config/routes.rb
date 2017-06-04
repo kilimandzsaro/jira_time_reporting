@@ -1,12 +1,16 @@
 Rails.application.routes.draw do
 
-  resources :global_settings
+  resources :global_settings do
+    collection do
+      get :get, to: "global_settings#get"
+    end
+  end
   resources :issues
   resources :issue_histories
   resources :businesses
   resources :users
 
-  resources :report_types, :except => [:show, :edit]
+  resources :report_types
   resources :components, :except => [:edit, :show, :update, :destroy] 
   resources :projects, :except => [:show]
 
@@ -16,9 +20,7 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :reports do
-    get :get
-  end
+  resources :reports
   get 'reports/index'
 
   resources :employees, :except => [:destroy] do
@@ -27,7 +29,7 @@ Rails.application.routes.draw do
       get :refresh, to: "employees#refresh"
     end
   end
-  
+
   devise_for :user, :controllers => {
     :registrations => "user/registrations",
     :sessions => "user/sessions",

@@ -17,11 +17,15 @@ class ReportTypesController < ApplicationController
     set_report_type
   end
 
+  def show
+    set_report_type
+  end
+
   # PATCH/PUT /report_types/1
   def update
-    @report_type = ReportType.find(params[:id])
+    set_report_type
     respond_to do |format|
-      if @report_type.update_attributes(update_report_type_params["report_types"])
+      if @report_type.update_attributes(update_report_type_params)
         format.html do
           redirect_to report_types_path
         end
@@ -36,7 +40,7 @@ class ReportTypesController < ApplicationController
   # POST /report_types
   # POST /report_types.json
   def create
-    @report_type = ReportType.new(update_report_type_params["report_types"])
+    @report_type = ReportType.new(update_report_type_params)
 
     respond_to do |format|
       if @report_type.save!
@@ -71,7 +75,7 @@ class ReportTypesController < ApplicationController
     end
 
     def update_report_type_params
-      params.require(:report_type).permit(report_types: [:id, :report_type])
+      params.require(:report_type).permit(:name, :employee_ids => [], :component_ids => [], :business_ids => [], :project_ids => [], :status_ids => [])
     end
 
 end

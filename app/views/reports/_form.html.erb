@@ -1,6 +1,6 @@
 <% if @report.errors.any? %>
   <div id="error_explanation">
-    <h2><%= pluralize(business.errors.count, "error") %> prohibited this business from being saved:</h2>
+    <h2><%= pluralize(@report.errors.count, "error") %> prohibited this report from being saved:</h2>
 
     <ul>
       <% @report.errors.full_messages.each do |message| %>
@@ -25,8 +25,7 @@
   <%= f.date_field :to_date, autocomplete: "off", placeholder: "YYYY-MM-DD", :class => "form-control" %>
 </div>
 
-<div class="field" id="settings">
-  <%= f.fields_for :settings do |setting| %>
-    <%= render 'settings_fields', f: setting %>
-  <% end %>
+<div class="field" id="report_type">
+  <%= f.label :report_type_id %>
+  <%= f.collection_select :report_type_id, ReportType.all, :id, :name, :class=> "form-control" %>
 </div>

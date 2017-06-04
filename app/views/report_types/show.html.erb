@@ -1,0 +1,41 @@
+<div class="col-md-7 col-md-offset-3 main">
+  <% provide(:title, "Report Type")%>
+  <center><h1>Report Type</h1></center>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Employees</th>
+        <th>Components</th>
+        <th>Business areas</th>
+        <th>Projects</th>
+        <th>Jira statuses</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td><%= @report_type.name %></td>
+        <td><% EmployeesReportType.where("report_type_id = #{@report_type.id}").each do |value| %>
+          <%= Employee.find(value.employee_id).email %><br>
+        <% end %></td>
+        <td><% ComponentsReportType.where("report_type_id = #{@report_type.id}").each do |value| %>
+          <%= Component.find(value.component_id).name %><br>
+        <% end %></td>
+        <td><% BusinessesReportType.where("report_type_id = #{@report_type.id}").each do |value| %>
+          <%= Business.find(value.business_id).name %><br>
+        <% end %></td>
+        <td><% ProjectsReportType.where("report_type_id = #{@report_type.id}").each do |value| %>
+          <%= Project.find(value.project_id).prefix %><br>
+        <% end %></td>
+        <td><% StatusesReportType.where("report_type_id = #{@report_type.id}").each do |value| %>
+          <%= Status.find(value.status_id).name %><br>
+        <% end %></td>
+        <td><%= button_to 'Edit', edit_report_type_path(@report_type), method: :get, class: 'btn btn-info btn-xs' %></td>
+        <td><%= link_to 'Destroy', @report_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<%= link_to 'Back', report_types_path %>

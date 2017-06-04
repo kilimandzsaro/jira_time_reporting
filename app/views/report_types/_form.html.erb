@@ -1,3 +1,39 @@
-<%= f.fields_for :report_types do |r_type| %>
-  <%= r_type.text_field :report_type, value: @report_type.report_type, :class => "form-control" %>
+<% if @report_type.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(business.errors.count, "error") %> prohibited this report type from being saved:</h2>
+
+    <ul>
+      <% @report_type.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
 <% end %>
+
+<div class="field" id="report_name">
+  <%= f.label :name %>
+  <%= f.text_field :name, autofocus: true, placeholder: "Report Type's name", :class => "form-control" %>
+</div>
+
+<div class="field" id="settings">
+  <%= f.label :employee_ids %>
+  <ul>
+    <%= f.collection_check_boxes :employee_ids, Employee.all, :id, :email, :class => "form-control" %>
+  </ul>
+  <%= f.label :component_ids %>
+  <ul>
+    <%= f.collection_check_boxes :component_ids, Component.all, :id, :name, :class => "form-control" %>
+  </ul>
+  <%= f.label :business_ids %>
+  <ul>
+    <%= f.collection_check_boxes :business_ids, Business.all, :id, :name, :class => "form-control" %>
+  </ul>
+  <%= f.label :project_ids %>
+  <ul>
+    <%= f.collection_check_boxes :project_ids, Project.all, :id, :name, :class => "form-control" %>
+  </ul>
+  <%= f.label :status_ids %>
+  <ul>
+    <%= f.collection_check_boxes :status_ids, Status.all, :id, :name, :class => "form-control" %>
+  </ul>
+</div>

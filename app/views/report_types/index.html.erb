@@ -4,8 +4,9 @@
   <table>
     <thead>
       <tr>
-        <th>Report type</th>
-        <th>Actions</th>
+        <th>Name</th>
+        <th>Business</th>
+        <th>Project</th>
         <th colspan="3"></th>
       </tr>
     </thead>
@@ -13,8 +14,19 @@
     <tbody>
       <% @report_types.each do |report_type| %>
         <tr>
-          <td><%= report_type.report_type %>
-          <td><%= link_to 'Edit', report_type_path(report_type) %></td>
+          <td><%= report_type.name %>
+          <td>
+            <% BusinessesReportType.where(report_type_id: report_type.id).each do |b| %>
+              <%= Business.find(b.business_id).name %><br>
+            <% end %>
+          </td>
+          <td>
+            <% ProjectsReportType.where(report_type_id: report_type.id).each do |p| %>
+              <%= Project.find(p.project_id).name %> (<%= Project.find(p.project_id).prefix %>)<br>
+            <% end %>
+          </td>
+          <td><%= button_to 'Show', report_type_path(report_type), method: :get, class: 'btn btn-info btn-xs' %></td>
+          <td><%= button_to 'Edit', edit_report_type_path(report_type), method: :get, class: 'btn btn-info btn-xs' %></td>
           <td><%= link_to 'Destroy', report_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr>
       <% end %>

@@ -4,7 +4,7 @@ class IssueHistoriesController < ApplicationController
   # GET /issue_histories
   # GET /issue_histories.json
   def index
-    @issue_histories = IssueHistory.all
+    @issue_histories = IssueHistory.paginate(page: params[:page], per_page: 50)
   end
 
   # GET /issue_histories/1

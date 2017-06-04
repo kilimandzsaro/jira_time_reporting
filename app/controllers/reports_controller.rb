@@ -11,13 +11,7 @@ class ReportsController < ApplicationController
   # GET /reports/1
   # GET /reports/1.json
   def show
-    @report = Report.find(params[:id])
-    @r_type = @report.settings['report_types']
-    @e_ids = @report.settings['employee_ids']
-    @b_ids = @report.settings['business_ids']
-    @c_ids = @report.settings['component_ids']
-    @p_ids = @report.settings['project_ids']
-    @stat = @report.settings['status_ids']
+    @report = set_report
   end
 
   # GET /reports/new
@@ -27,49 +21,13 @@ class ReportsController < ApplicationController
 
   # GET /reports/1/edit
   def edit
-    @report = Report.find(params[:id])
-    @r_type = @report.settings['report_types']
-    @e_ids = @report.settings['employee_ids']
-    @b_ids = @report.settings['business_ids']
-    @c_ids = @report.settings['component_ids']
-    @p_ids = @report.settings['project_ids']
-    @stat = @report.settings['status_ids']
-  end
-
-  def get
-    report = Report.find(params[:report_id])
-    auth = GlobalSetting.find_by(active: true).base64_key
-    connect_to_jira = GetJiraResponseService.new
-
-    report.settings['project_ids'].each do |project|
-      components = Array.new
-      components = connect_to_jira.project_components(project)
-      cs = ComponentsService.new
-      cs.add_new_components(components)
-
-      issues = Array.new
-      issues = connect_to_jira.all_issues(project)
-      is = IssuesService.new
-      is.add_new_issues(issues)
-    end
-
-    Issue.where("is_done = FALSE").each do |i|
-      history = connect_to_jira.issue_history(i.issue_key)
-      h = IssueHistoriesService.new(history)
-      h.process_issue_history
-    end
+    @report = set_report
   end
 
   # POST /reports
   # POST /reports.json
   def create
     @report = Report.new(report_params)
-    @report.settings['report_types'].shift
-    @report.settings['employee_ids'].shift
-    @report.settings['business_ids'].shift
-    @report.settings['component_ids'].shift
-    @report.settings['status_ids'].shift
-    @report.settings['project_ids'].shift
 
     respond_to do |format|
       if @report.save
@@ -85,13 +43,7 @@ class ReportsController < ApplicationController
   # PATCH/PUT /reports/1
   # PATCH/PUT /reports/1.json
   def update
-    @report = Report.find(params[:id])
-    @report.settings['report_types'].shift
-    @report.settings['employee_ids'].shift
-    @report.settings['business_ids'].shift
-    @report.settings['component_ids'].shift
-    @report.settings['status_ids'].shift
-    @report.settings['project_ids'].shift
+    @report = set_report
     respond_to do |format|
       if @report.save
         format.html { redirect_to @report, notice: 'Report was successfully updated.' }
@@ -121,11 +73,8 @@ class ReportsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def report_params
-      # params.require(:report).permit(:name => "", :from_date => "", :to_date => "", 
-      #     :settings =>
-      #       [:report_types, :employee_ids, :component_ids, :business_ids, :status_ids ]
-      #   )
-      params.require(:report).permit!
+      params.require(:report).permit(:name, :from_date, :to_date, :report_type_id )
+      # params.require(:report).permit!
     end
 
     def signed_in_user

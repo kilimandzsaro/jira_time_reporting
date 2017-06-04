@@ -7,6 +7,8 @@ require 'jquery-rails'
 require 'jquery-turbolinks'
 require 'bootstrap-sass'
 require 'httparty'
+require 'business_time'
+require 'holidays'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -14,11 +16,12 @@ require 'httparty'
 module JiraTimeReporting
   class Application < Rails::Application
     config.active_record.time_zone_aware_types = [:datetime, :time]
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
-    # if Rails.env.development?
-    #   Spring.watch "#{Rails.root}/app/services/**"
+    BusinessTime::Config.work_week = [:mon, :tue, :wed, :fri]
+    BusinessTime::Config.beginning_of_workday = "9:00 am"
+    BusinessTime::Config.end_of_workday = "5:30 pm"
+    # Holidays.load_custom("#{Rails.root}/config/ee_custom_holidays.yaml")
+    # Holidays.between(Date.civil(2017,1,1), 5.years.from_now, :ee, :observer).map do |holiday|
+    #   BusinessTime::Config.holidays << holiday[:date]
     # end
   end
 end

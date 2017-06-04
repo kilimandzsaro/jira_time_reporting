@@ -32,10 +32,8 @@ class IssueHistoriesService
       changelog_history_id = h['id']
       h['items'].each do |item|
         assignee_id = get_assignee_id_from_history_item(item, assignee_id)
-        p "ASSAGNEE: #{assignee_id}"
         new_status_id = get_next_status_id(item)
         last_status_id = get_last_status_id(item)
-        p "LAST STATUS: #{last_status_id}"
         
         last_status_id = process_status_field(changelog_history_id, h['created'], last_status_id, new_status_id, nil, assignee_id) if item['field'] == 'status'         
       end
@@ -54,7 +52,6 @@ class IssueHistoriesService
   end
 
   def get_next_status_id(item)
-    p "GET_NEXT_STATUS_ID: #{item['toString']}, #{issue.issue_key}, #{item['field']}"
     if Status.find_by_name(item['toString']).nil? && item['field'] == 'status'
       s = Status.new
       s.name = item['toString']
@@ -65,7 +62,6 @@ class IssueHistoriesService
   end
 
   def get_last_status_id(item)
-    p "STATUS: #{item['fromString']}"
     return Status.find_by_name(item['fromString']).id if item['field'] == 'status'
   end
 
@@ -86,7 +82,6 @@ class IssueHistoriesService
   end
 
   def update_issue_done_state(start_at, last_status_id, new_status_id)
-    p "NEW STATUS: #{new_status_id}"
     if !new_status_id.nil? && (Status.find(new_status_id).name == 'Done' || Status.find(new_status_id).name == 'Closed')
       ih = IssueHistory.order(:updated_at).find_by(issue_id: issue.id, status_id: last_status_id)
       if !ih.nil? && !issue.is_done
@@ -102,7 +97,6 @@ class IssueHistoriesService
 
   def add_components_to_components_issues_table(components)
     components.each do |c|
-      p "COMPONENTS: #{c}"
       if ComponentsIssue.find_by(component_id: Component.find_by_name(c['name']).id, issue_id: issue.id).nil?
         ci = ComponentsIssue.new
         ci.component_id = Component.find_by_name(c['name']).id
@@ -139,7 +133,6 @@ class IssueHistoriesService
 
   def add_issue_history(history_id, issue_id, status_id, start_date, employee_id)
     ih = IssueHistory.new
-    p "HI: #{history_id}, II: #{issue_id}, SI: #{status_id}, SD: #{start_date}, EI: #{employee_id}"
     ih.changelog_id_tag = history_id
     ih.issue_id = issue_id
     ih.status_id = status_id

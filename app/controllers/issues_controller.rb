@@ -4,7 +4,7 @@ class IssuesController < ApplicationController
   # GET /issues
   # GET /issues.json
   def index
-    @issues = Issue.all
+    @issues = Issue.paginate(page: params[:page], per_page: 50)
   end
 
   # GET /issues/1
