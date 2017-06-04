@@ -10,8 +10,11 @@ class ComponentsController < ApplicationController
 
   # GET /components/get
   def get
-    GetJiraResponseService.new("application/json","Base #{ENV['JIRA_BASE64']}")
-    GetJiraResponseService.all_issues("INBT")
+    GetJiraResponseService.new
+    projects = Project.all
+    p.prefix.each do |project|
+      GetJiraResponseService.all_issues(project)
+    end
   end
 
   # GET /components/new

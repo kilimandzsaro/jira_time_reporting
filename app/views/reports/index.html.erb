@@ -34,7 +34,7 @@
           <td><% report.settings['business_ids'].each do |value| %>
             <%= Business.find(value).name %><br>
           <% end %></td>
-          <td><% @p_ids.each do |value| %>
+          <td><% report.settings['project_ids'].each do |value| %>
             <%= Project.find(value).prefix %><br>
           <% end %></td>
           <td><%= link_to 'Show', report %></td>

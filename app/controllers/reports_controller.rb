@@ -39,7 +39,7 @@ class ReportsController < ApplicationController
   def get
     report = Report.find(params[:report_id])
     auth = GlobalSetting.find_by(active: true).base64_key
-    connect_to_jira = GetJiraResponseService.new("application/json", "Basic #{auth}")
+    connect_to_jira = GetJiraResponseService.new
 
     report.settings['project_ids'].each do |project|
       components = Array.new
@@ -53,10 +53,10 @@ class ReportsController < ApplicationController
       is.add_new_issues(issues)
     end
 
-    Issue.where("is_done = false").each do |i|
+    Issue.where("is_done = FALSE").each do |i|
       history = connect_to_jira.issue_history(i.issue_key)
-      h = IssueHistoriesService.new
-      h.process_issue_history(history)
+      h = IssueHistoriesService.new(history)
+      h.process_issue_history
     end
   end
 
