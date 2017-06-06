@@ -17,6 +17,20 @@ class StatusesController < ApplicationController
     end
   end
 
+  def edit
+    set_status
+  end
+
+  def update
+    @status.counted = params[:counted]
+    if @status.save
+      redirect_to statuses_path, notice: 'Status was successfully updated'
+    else
+      render :edit
+    end
+  end
+
+
   # GET /statuses#refresh
   def refresh
     connect_to_jira = GetJiraResponseService.new
@@ -45,6 +59,6 @@ class StatusesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def status_params
-      params.require(:status).permit(:name)
+      params.require(:status).permit(:counted)
     end
 end

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :report_results, :except => [:edit, :show, :destroy]
   resources :global_settings do
     collection do
       get :get, to: "global_settings#get"
@@ -14,13 +15,16 @@ Rails.application.routes.draw do
   resources :components, :except => [:edit, :show, :update, :destroy] 
   resources :projects, :except => [:show]
 
-  resources :statuses, :except => [:show, :edit, :update] do
+  resources :statuses, :except => [:show] do
     collection do
       get :refresh, to: "statuses#refresh"
     end
   end
   
-  resources :reports
+  resources :reports do 
+    get :get_report, to: "reports#get_report"
+    get :get_results, to: "reports#get_results"
+  end
   get 'reports/index'
 
   resources :employees, :except => [:destroy] do

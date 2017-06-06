@@ -6,6 +6,8 @@ class Issue < ApplicationRecord
   has_many :businesses, through: :businesses_issues
   has_many :projects
 
+  belongs_to :report_result
+
   validates_uniqueness_of :issue_key
   validates_uniqueness_of :jira_id_tag
 end

@@ -25,6 +25,11 @@
               <%= Project.find(p.project_id).name %> (<%= Project.find(p.project_id).prefix %>)<br>
             <% end %>
           </td>
+          <td>
+            <% EmployeesReportType.where(report_type_id: report_type.id).each do |e| %>
+              <%= Employee.find(e.employee_id).display_name %><br>
+            <% end %>
+          </td>
           <td><%= button_to 'Show', report_type_path(report_type), method: :get, class: 'btn btn-info btn-xs' %></td>
           <td><%= button_to 'Edit', edit_report_type_path(report_type), method: :get, class: 'btn btn-info btn-xs' %></td>
           <td><%= link_to 'Destroy', report_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>

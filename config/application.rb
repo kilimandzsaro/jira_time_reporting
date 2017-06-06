@@ -17,8 +17,8 @@ module JiraTimeReporting
   class Application < Rails::Application
     config.active_record.time_zone_aware_types = [:datetime, :time]
     BusinessTime::Config.work_week = [:mon, :tue, :wed, :fri]
-    BusinessTime::Config.beginning_of_workday = "9:00 am"
-    BusinessTime::Config.end_of_workday = "5:30 pm"
+    BusinessTime::Config.beginning_of_workday = "7:00 am"
+    BusinessTime::Config.end_of_workday = "7:30 pm"
     # Holidays.load_custom("#{Rails.root}/config/ee_custom_holidays.yaml")
     # Holidays.between(Date.civil(2017,1,1), 5.years.from_now, :ee, :observer).map do |holiday|
     #   BusinessTime::Config.holidays << holiday[:date]

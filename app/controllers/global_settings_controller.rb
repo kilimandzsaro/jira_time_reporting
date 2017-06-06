@@ -33,25 +33,34 @@ class GlobalSettingsController < ApplicationController
   end
 
   def get
-    auth = GlobalSetting.find_by_active(true).base64_key
-    connect_to_jira = GetJiraResponseService.new
+    # auth = GlobalSetting.find_by_active(true).base64_key
+    # connect_to_jira = GetJiraResponseService.new
 
-    Project.all.each do |project|
-      components = Array.new
-      components = connect_to_jira.project_components(project.id)
-      cs = ComponentsService.new
-      cs.add_new_components(components)
+    # Project.all.each do |project|
+    #   components = Array.new
+    #   components = connect_to_jira.project_components(project.id)
+    #   cs = ComponentsService.new
+    #   cs.add_new_components(components)
 
-      issues = Array.new
-      issues = connect_to_jira.all_issues(project.id)
-      is = IssuesService.new
-      is.add_new_issues(issues)
-    end
+    #   issues = Array.new
+    #   issues = connect_to_jira.all_issues(project.id)
+    #   is = IssuesService.new
+    #   is.add_new_issues(issues)
+    # end
+
+    # Issue.all.each do |i|
+    #   history = connect_to_jira.issue_history(i.issue_key)
+    #   h = IssueHistoriesService.new(history)
+    #   h.process_issue_history
+    # end
 
     Issue.all.each do |i|
-      history = connect_to_jira.issue_history(i.issue_key)
-      h = IssueHistoriesService.new(history)
-      h.process_issue_history
+      end_date = ""
+      IssueHistory.order("changelog_id_tag DESC").where("issue_id = ?", i).each do |ih|
+        ih.end_date = end_date
+        end_date = ih.start_date
+        ih.save
+      end
     end
 
     calculate_duration
@@ -77,7 +86,7 @@ class GlobalSettingsController < ApplicationController
   private
     def calculate_duration
       IssueHistory.where("end_date IS NOT NULL").each do |ih|
-        duration = Time.at(ih.start_date.business_time_until(ih.end_date)).utc.strftime("%H:%M:%S")
+        duration = ih.start_date.business_time_until(ih.end_date)
         if ih.duration != duration
           ih.duration = duration
           ih.save!

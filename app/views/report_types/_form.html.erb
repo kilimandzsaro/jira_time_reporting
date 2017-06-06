@@ -1,6 +1,6 @@
 <% if @report_type.errors.any? %>
   <div id="error_explanation">
-    <h2><%= pluralize(business.errors.count, "error") %> prohibited this report type from being saved:</h2>
+    <h2><%= pluralize(@report_type.errors.count, "error") %> prohibited this report type from being saved:</h2>
 
     <ul>
       <% @report_type.errors.full_messages.each do |message| %>

@@ -1,6 +1,6 @@
 class IssueHistoriesService
 
-  attr_accessor :history, :component_ids, :business_ids, :project_id, :issue
+  attr_accessor :history, :issue
 
   def initialize(history)
     self.history = history
@@ -25,7 +25,6 @@ class IssueHistoriesService
 
   def process_history(history)
     assignee_id = @original_assagnee
-    last_status_id = 0
     history.sort_by {|e| e[:id]}
 
     history.each do |h|
@@ -33,9 +32,7 @@ class IssueHistoriesService
       h['items'].each do |item|
         assignee_id = get_assignee_id_from_history_item(item, assignee_id)
         new_status_id = get_next_status_id(item)
-        last_status_id = get_last_status_id(item)
-        
-        last_status_id = process_status_field(changelog_history_id, h['created'], last_status_id, new_status_id, nil, assignee_id) if item['field'] == 'status'         
+        add_issue_history(changelog_history_id, issue.id, new_status_id, h['created'], assignee_id) unless update_issue_done_state(h['created'], new_status_id)
       end
     end
   end
@@ -61,29 +58,9 @@ class IssueHistoriesService
     return Status.find_by_name(item['toString']).id if item['field'] == 'status'
   end
 
-  def get_last_status_id(item)
-    return Status.find_by_name(item['fromString']).id if item['field'] == 'status'
-  end
-
-  def process_status_field(history_id, start_at, last_status_id, new_status_id, end_date, assignee_id)
-    ih = IssueHistory.order(:changelog_id_tag).find_by(issue_id: issue.id, status_id: last_status_id, changelog_id_tag: history_id)
-
-    if !ih.nil? && ih.end_date.nil?
-      ih.end_date = start_at
-      ih.save
-    else
-      unless update_issue_done_state(start_at, last_status_id, new_status_id)
-        last_status_id = new_status_id
-        p "==== ADDING: #{history_id}, #{issue.id}, #{new_status_id}, #{start_at}, #{assignee_id}"
-        add_issue_history(history_id, issue.id, new_status_id, start_at, assignee_id) if IssueHistory.find_by(changelog_id_tag: history_id, issue_id: issue.id).nil?
-      end
-    end
-    return last_status_id
-  end
-
-  def update_issue_done_state(start_at, last_status_id, new_status_id)
+  def update_issue_done_state(start_at, new_status_id)
     if !new_status_id.nil? && (Status.find(new_status_id).name == 'Done' || Status.find(new_status_id).name == 'Closed')
-      ih = IssueHistory.order(:updated_at).find_by(issue_id: issue.id, status_id: last_status_id)
+      ih = IssueHistory.order("changelog_id_tag DESC").find_by(issue_id: issue.id)
       if !ih.nil? && !issue.is_done
         issue.is_done = true
         ih.end_date = start_at unless ih.end_date == start_at
