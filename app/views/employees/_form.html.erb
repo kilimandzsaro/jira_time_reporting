@@ -1,7 +1,7 @@
 <%= f.fields_for :employees do |employee| %>
   <%= employee.text_field :name, value: @employee.name, :class => "form-control" %>
   <%= employee.text_field :email, value: @employee.email, :class => "form-control", :readonly => true %>
-  <%= employee.text_field :status, value: @employee.status, :class => "form-control" %>
+  <%= employee.text_field :active, value: @employee.active, :class => "form-control", :readonly => true %>
   <% employee.issue_history.each do |ih| %>
     <%= IssueHistory.find(ih).jira_name %>-<%= ih %>
   <% end %>

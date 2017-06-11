@@ -4,5 +4,4 @@ class Employee < ApplicationRecord
   has_many :employees_report_types
   has_many :report_types, through: :employees_report_types
 
-  belongs_to :report_result
 end

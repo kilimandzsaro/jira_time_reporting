@@ -79,19 +79,9 @@ class EmployeesController < ApplicationController
     Project.all.each do |project|
       employees = connect_to_jira.employees(project.prefix)
       employees.each do |employee|
-        p "----#{employee}"
         if Employee.find_by_email(employee['emailAddress']).nil?
-          e = Employee.new
-          e.name = employee['name']
-          e.email = employee['emailAddress']
-          e.key = employee['key']
-          e.display_name = employee['displayName']
-          if (employee['active']) 
-            e.status = 'active'
-          else 
-            e.status = 'inactive'
-          end
-          e.save
+          e = Employee.new(name: employee['name'], email: employee['emailAddress'], key: employee['key'], display_name: employee['displayName'], active: employee['active'])
+          e.save!
         end
       end
     end

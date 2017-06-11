@@ -20,7 +20,13 @@
           <tr>
             <td><%= employee.name %></td>
             <td><%= employee.email %></td>
-            <td><%= employee.status %></td>
+            <td>
+              <% if employee.active? %>
+               <font color="#17CA05">Active</font>
+              <% else %>
+                <font color="#C60606">Inactive</font>
+              <% end %>
+            </td>
             <td><%= employee.key %></td>
             <td><%= employee.display_name %></td>
             <td><%= link_to 'Hide', employee_hide_and_show_path(employee) %></td>
@@ -30,7 +36,13 @@
           <tr>
             <td><%= employee.name %></td>
             <td><%= employee.email %></td>
-            <td><%= employee.status %></td>
+            <td>
+              <% if employee.active? %>
+               <font color="#17CA05">Active</font>
+              <% else %>
+                <font color="#C60606">Inactive</font>
+              <% end %>
+            </td>
             <td><%= employee.key %></td>
             <td><%= employee.display_name %></td>
             <% if employee.hide %>
