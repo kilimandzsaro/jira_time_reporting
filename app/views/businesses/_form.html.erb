@@ -1,10 +1,10 @@
-<%= form_for(business) do |f| %>
-  <% if business.errors.any? %>
+<%= form_for(@business) do |f| %>
+  <% if @business.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(business.errors.count, "error") %> prohibited this business from being saved:</h2>
+      <h2><%= pluralize(@business.errors.count, "error") %> prohibited this business from being saved:</h2>
 
       <ul>
-      <% business.errors.full_messages.each do |message| %>
+      <% @business.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>
@@ -13,20 +13,16 @@
 
   <div class="field">
     <%= f.label :name %>
-    <%= f.text_field :name, :readonly => true %>
+    <%= f.text_field :name, :class => "form-control" %>
   </div>
 
   <div class="field">
     <%= f.label :jira_name %>
-    <%= f.text_field :jira_name, :readonly => true %>
+    <%= f.text_field :jira_name, :class => "form-control", :readonly => true %>
   </div>
 
   <div class="field">
     <%= f.label :price %>
-    <%= f.text_field :price, value: number_to_currency(f.object.price.to_f, delimiter: ' ', unit: '€'), step: :any %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit %>
+    <%= f.text_field :price, value: number_to_currency(f.object.price.to_f, unit: ''), step: :any, :class => "form-control" %>
   </div>
 <% end %>

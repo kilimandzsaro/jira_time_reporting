@@ -21,14 +21,16 @@ class ReportResultsService
   end
 
   def get_calculated_work_hours
-    p "FROM DATE: #{from_date}, TO DATE: #{to_date}"
-    return from_date.business_days_until(to_date) * 6
+    if to_date - from_date < (4 * 60 * 60) # less than 4 hours
+      return (to_date - from_date)
+    else
+      return from_date.business_time_until(to_date)
+    end
   end
 
   def calculate_and_save_personal_times(report_result_id, original_sum_time, calculated_sum_time)
     rr = ReportResult.find(report_result_id)
-    rr.calculated = ((rr.spent * calculated_sum_time) / original_sum_time).round unless original_sum_time == 0
-    p "RRRR: #{rr.calculated}"
+    rr.calculated = ((rr.spent * calculated_sum_time) / original_sum_time).round(2) unless original_sum_time == 0
     rr.save!
   end
 
@@ -46,14 +48,8 @@ class ReportResultsService
                      .where("end_date IS NULL OR end_date > ?", to_date)
                      .where("employee_id = ?", employee_id)
                      .where("status_id IN (?)", counted_statuses)
-    issue_history.each do |ih|
-      if ReportResult.find_by(issue_id: ih.issue_id, employee_id: employee_id, report_id: report_id).nil?
-        p "FROM_DATE: #{from_date}, TO DATE: #{to_date}"
-        d = Time.parse(from_date.to_s).business_time_until(Time.parse(to_date.to_s))
-        p "D: #{d}"
-        save_report_result(employee_id, d, ih.issue_id, report_id)
-      end
-    end
+
+    save_report_result(employee_id, calculate_duration(issue_history, from_date, to_date), ih.issue_id, report_id)
   end
 
   def start_date_less_than_from_date_and_end_date_between_the_range
@@ -61,14 +57,8 @@ class ReportResultsService
                      .where("end_date BETWEEN ? AND ?", from_date, to_date)
                      .where("employee_id = ?", employee_id)
                      .where("status_id IN (?)", counted_statuses)
-    issue_history.each do |ih|
-      if ReportResult.find_by(issue_id: ih.issue_id, employee_id: employee_id, report_id: report_id).nil?
-        p "FROM_DATE: #{from_date}, IH END DATE: #{ih.end_date}"
-        d = Time.parse(from_date.to_s).business_time_until(Time.parse(ih.end_date.to_s))
-        p "D: #{d}"
-        save_report_result(employee_id, d, ih.issue_id, report_id)
-      end
-    end
+
+    save_report_result(employee_id, calculate_duration(issue_history, from_date, ih.end_date), ih.issue_id, report_id)
   end
 
   def start_date_between_the_range_and_end_date_is_out_of_range
@@ -76,14 +66,8 @@ class ReportResultsService
                      .where("end_date IS NULL OR end_date > ?", to_date)
                      .where("employee_id = ?", employee_id)
                      .where("status_id IN (?)", counted_statuses)
-    issue_history.each do |ih|
-      if ReportResult.find_by(issue_id: ih.issue_id, employee_id: employee_id, report_id: report_id).nil?
-        p "IH START DATE: #{ih.start_date}, TO END: #{to_date}"
-        d = Time.parse(ih.start_date.to_s).business_time_until(Time.parse(to_date.to_s))
-        p "D: #{d}"
-        save_report_result(employee_id, d, ih.issue_id, report_id)
-      end
-    end
+    
+    save_report_result(employee_id, calculate_duration(issue_history, ih.start_date, to_date), ih.issue_id, report_id)
   end
 
   def start_date_between_the_range_and_end_date_between_the_range
@@ -91,12 +75,18 @@ class ReportResultsService
                      .where("end_date BETWEEN ? AND ?", from_date, to_date)
                      .where("employee_id = ?", employee_id)
                      .where("status_id IN (?)", counted_statuses)
+
+    save_report_result(employee_id, calculate_duration(issue_history, ih.start_date, ih.end_date), ih.issue_id, report_id)
+  end
+
+  def calculate_duration(issue_history, from_date, to_date)
     issue_history.each do |ih|
       if ReportResult.find_by(issue_id: ih.issue_id, employee_id: employee_id, report_id: report_id).nil?
-        p "IH START DATE: #{ih.start_date}, IH END DATE: #{ih.end_date}"
-        d = Time.parse(ih.start_date.to_s).business_time_until(Time.parse(ih.end_date.to_s))
-        p "D: #{d}"
-        save_report_result(employee_id, d, ih.issue_id, report_id)
+        if to_date - from_date < (4 * 60 * 60)
+          return (to_date - from_date)
+        else
+          return Time.parse(from_date.to_s).business_time_until(Time.parse(to_date.to_s))
+        end
       end
     end
   end

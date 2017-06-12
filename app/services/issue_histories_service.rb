@@ -15,7 +15,9 @@ class IssueHistoriesService
     add_project_id_to_issue(Project.find_by_prefix(history['fields']['project']['key']).id)
     
     # some cases when the card was assigned to a person and he moved the card, in the history there is the status change, but no assignee change
-    @original_assagnee = Employee.where("key like ?","#{history['fields']['assignee']['key']}%").first.id if !history['fields']['assignee'].nil?
+    @original_assignee = 0
+    @original_assignee = Employee.where("key like ?","#{history['fields']['assignee']['key']}%").first.id if !history['fields']['assignee'].nil?
+    
     process_history(history['changelog']['histories'])
 
     issue.save
@@ -24,9 +26,8 @@ class IssueHistoriesService
   private
 
   def process_history(history)
-    assignee_id = @original_assagnee
+    assignee_id = @original_assignee
     history.sort_by {|e| e[:id]}
-
     history.each do |h|
       changelog_history_id = h['id']
       h['items'].each do |item|
@@ -68,6 +69,9 @@ class IssueHistoriesService
         ih.save
         return true
       end
+    # need to handle the non status change changelogs. In these cases the status_id is empty and no need to save the issue history
+    elsif new_status_id.nil?
+      return true
     end
     return false
   end

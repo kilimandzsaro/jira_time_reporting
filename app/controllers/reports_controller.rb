@@ -1,6 +1,6 @@
 class ReportsController < ApplicationController
   before_action :signed_in_user, only: [:show, :edit, :update, :destroy]
-  before_action :set_report, only: [:show, :edit, :update, :destroy, :get_results]
+  before_action :set_report, only: [:show, :edit, :update, :destroy]
 
   # GET /reports
   # GET /reports.json
@@ -27,6 +27,8 @@ class ReportsController < ApplicationController
       rrs = ReportResultsService.new(report.from_date, report.to_date, employee.employee_id, report.id)
       spent = rrs.get_original_times
       calculated = rrs.get_calculated_work_hours
+      # Calculate each person's time for the certain period. The calculation must be done on all
+      # issues and statuses from issue_histories which connected to the certain person
       ReportResult.where(report_id: params[:report_id]).each do |rr|
         rrs.calculate_and_save_personal_times(rr.id, spent, calculated)
       end
@@ -35,6 +37,7 @@ class ReportsController < ApplicationController
   end
 
   def get_results
+    @report = Report.find(params[:report_id])
   end
 
   # GET /reports/1/edit

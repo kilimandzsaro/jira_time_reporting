@@ -7,7 +7,7 @@ class EmployeesService
     e.name = name
     e.key = name
     e.display_name = display_name
-    e.status = "inactive"
+    e.active = false
     e.hide = true
     e.email = name
     e.save

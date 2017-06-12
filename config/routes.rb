@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   end
   resources :issues
   resources :issue_histories
-  resources :businesses
+  resources :businesses, :except => [:show, :destroy, :create]
   resources :users
 
   resources :report_types
