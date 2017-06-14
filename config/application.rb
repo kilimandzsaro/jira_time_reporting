@@ -22,5 +22,12 @@ module JiraTimeReporting
     # Holidays.between(Date.civil(2017,1,1), 5.years.from_now, :ee, :observer).map do |holiday|
     #   BusinessTime::Config.holidays << holiday[:date]
     # end
+
+    # use OmniAuth::Builder do
+    #   provider :JIRA, 
+    #     "<consumer_key>", 
+    #     OpenSSL::PKey::RSA.new(IO.read(File.dirname(__FILE__) + "<PRIVATE_KEY_FILE>")),
+    #     :client_options => { :site => "<http://jira.url>" }
+    # end
   end
 end

@@ -37,6 +37,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'httparty'
 gem 'devise'
+gem 'omniauth-jira'
 
 gem 'will_paginate', '~> 3.1.0'
 gem 'will_paginate-bootstrap'
