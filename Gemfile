@@ -42,7 +42,7 @@ gem 'will_paginate', '~> 3.1.0'
 gem 'will_paginate-bootstrap'
 
 gem 'business_time'
-gem 'holidays'
+gem 'holidays', :git => 'https://github.com/holidays/holidays'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

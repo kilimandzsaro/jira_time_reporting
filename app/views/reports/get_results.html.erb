@@ -1,37 +1,75 @@
 <div class="col-md-7 col-md-offset-3 main">
   <% provide(:title, "Results for #{@report.id} Report")%>
   <center><h1>Result of <%= @report.name %></h1></center>
-  <% BusinessesReportType.where("report_type_id = ?", @report.report_type_id).each do |brt| %>
-    <h2><%= Business.find(brt.business_id).name %></h2>
-    <% EmployeesReportType.where("report_type_id = ?", @report.report_type_id).each do |ert| %>
-      <table class="table-bordered">
+
+  <% @report_data.each do |business, proj_hash| %>
+    <% business_sum = 0.0 %>
+    <% BusinessesIssue.where(business_id: business).where("issue_id IN ( ? )", @issue_list).each { |bi| business_sum += ReportResult.where(issue_id: bi.issue_id).where(report_id: @report.id).sum(:calculated) } %>
+    
+    <div class="col-md-7 col-md-offset-3 header">
+      <table class="table-hover col-md-12">
         <thead>
           <tr>
-            <th><%= Employee.find(ert.employee_id).display_name %></th>
-            <th>
-              <% sum = 0 %>
-              <% ReportResult.where("report_id = ?", @report.id).where("employee_id = ?", ert.employee_id).each  { |rr| sum += rr.calculated } %>
-              <b><font color="#8E24DC"><%= sum %></b></font> h
-            </th>
-            <th colspan="3"></th>
+            <th><h3><%= Business.find(business).name %></h3></th>
+            <th><h3><%= business_sum.round(2) %> h</h3></th>
+            <th><h3><%= (business_sum * Business.find(business).price).round(2) %> €</h3></th>
           </tr>
         </thead>
-
-        <tbody>
-          <% ReportResult.order(:issue_id).where("report_id = ?", @report.id).where("employee_id = ?", ert.employee_id).where("calculated != ?", 0).each  do |rr| %>
-            <tr>
-              <td><% issue = Issue.find(rr.issue_id) %>
-              <%= issue.issue_key %> - <%= issue.title %></td>
-              <td><b><%= rr.calculated %></b> h</td>
-              <td><% ComponentsIssue.where("issue_id = ?", issue.id).each do |c| %>
-                <%= Component.find(c.component_id).name %><br>
-              <% end %></td>
-            </tr>
-          <% end %>
-        </tbody>
       </table>
-      <br>
-    <% end %>
+    </div>
+
+    <div class="col-md-12 col-md-offset-3 main">
+      <table class="table-hover">
+        <% proj_hash.each do |project, emp_hash| %>
+          <thead>
+            <tr>
+              <th><%= Project.find(project).name if !emp_hash.values.empty? %></th>
+            </tr>
+          </thead>
+
+          <% emp_hash.each do |employee, value| %>
+            <% sum = 0.0 %>
+            <% value.each { |v| sum += ReportResult.where(:issue_id => v).where(:employee_id => employee).first.calculated } %>
+            <tbody>
+              <tr>
+                <% if sum > 0.0 %>
+                  <div class="col-md-12 col-md-offset-3 main">
+                    <table class="table-bordered">
+                      <thead>
+                        <tr>
+                          <th><%= Employee.find(employee).display_name %></th>
+                          <th><b><font color="#8E24DC"><%= sum.round(2) %> h</font></b></th>
+                          <th><b><font color="#8E24DC"><%= (sum * Business.find(business).price).round(2) %> € </font></b></th>
+                          <th></th>
+                          <th colspan="4"></th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <% value.each do |v| %>
+                          <tr>
+                            <td><%= Issue.find(v).issue_key %> - <%= Issue.find(v).title %></td>
+                            <td><%= ReportResult.where(:issue_id => v).where(:employee_id => employee).first.calculated.round(2) %> h</td>
+                            <td><%= (ReportResult.where(:issue_id => v).where(:employee_id => employee).first.calculated * Business.find(business).price).round(2) %> €</td>
+                            <td>
+                              <% ComponentsIssue.where(:issue_id => v).each do |comp| %>
+                                <%= Component.find(comp.component_id).name %><br>
+                              <% end %>
+                            </td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                    <br>
+                  </div>
+                <% end %>
+              </tr>
+            </tbody>
+          <% end %>
+        <% end %>
+      </table>
+    </div>
+
   <% end %>
 </div>
 <%= link_to 'Back', reports_path %>

@@ -25,19 +25,42 @@ class ReportsController < ApplicationController
 
     EmployeesReportType.where(report_type_id: report.report_type_id).each do |employee|
       rrs = ReportResultsService.new(report.from_date, report.to_date, employee.employee_id, report.id)
-      spent = rrs.get_original_times
-      calculated = rrs.get_calculated_work_hours
-      # Calculate each person's time for the certain period. The calculation must be done on all
-      # issues and statuses from issue_histories which connected to the certain person
-      ReportResult.where(report_id: params[:report_id]).each do |rr|
-        rrs.calculate_and_save_personal_times(rr.id, spent, calculated)
-      end
+      rrs.set_spent_times
     end
+
+    EmployeesReportType.where(report_type_id: report.report_type_id).each do |employee|
+      rrs = ReportResultsService.new(report.from_date, report.to_date, employee.employee_id, report.id)
+      rrs.set_calculated_work_hours
+    end
+
     redirect_to report_results_path
   end
 
   def get_results
     @report = Report.find(params[:report_id])
+    report_type_id = @report.report_type_id
+    @issue_list = Array.new
+    ReportResult.where(report_id: @report.id).each {|rr| @issue_list.push(rr.issue_id)}
+    # define the big report hash for showing the results
+    @report_data = Hash.new do |hash, key|
+      hash[key] = Hash.new do |hash, key|
+        hash[key] = Hash.new
+      end
+    end
+
+    # fill the hash
+    BusinessesReportType.where(report_type_id: report_type_id).each do |brt|
+      ProjectsReportType.where(report_type_id: report_type_id).each do |prt|
+        EmployeesReportType.where(report_type_id: report_type_id).each do |ert|
+          @report_data[brt.business_id][prt.project_id][ert.employee_id] = Array.new
+          ReportResult.where(report_id: @report.id).where(employee_id: ert.employee_id).each do |rr|
+            if (Issue.find(rr.issue_id).project_id == prt.project_id) && (!BusinessesIssue.where(issue_id: rr.issue_id).where(business_id: brt.id).empty?)
+              @report_data[brt.business_id][prt.project_id][ert.employee_id].push(rr.issue_id)
+            end
+          end
+        end
+      end
+    end
   end
 
   # GET /reports/1/edit
