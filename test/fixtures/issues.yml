@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  jira_id: 1
+  jira_id_tag: 1
   issue_key: MyString
   title: MyString
   is_done: false
 
 two:
-  jira_id: 2
+  jira_id_tag: 2
   issue_key: MyString2
   title: MyString2
   is_done: true

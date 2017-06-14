@@ -1,10 +1,16 @@
 <div class="col-md-7 col-md-offset-3 main">
   <% provide(:title, "Reports") %>
   <center><h1>Edit reports</h1></center>
-  <%= form_for(@reports) do |f| %>
+  <%= form_for(@report) do |f| %>
     <%= render 'shared/error_messages' %>
     <div class="col-md-12">
-      <%= render 'layouts/reports_form', f: f %>
+      <%= render 'form', f: f %>
+    </div>
+    <div class="action" id="update">
+      <%= f.submit "Update", class: "btn btn-large btn-primary" %>
+    </div>
+    <div id="cancel">
+      <%= link_to 'Cancel', reports_path, class: "btn btn-large" %>
     </div>
   <% end %>
 </div>

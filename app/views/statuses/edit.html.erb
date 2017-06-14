@@ -1,0 +1,16 @@
+<div class="col-md-7 col-md-offset-3 main">
+  <% provide(:title, "Status") %>
+  <center><h1>Edit status</h1></center>
+  <%= form_for(@status) do |f| %>
+    <%= render 'shared/error_messages' %>
+    <div class="col-md-12">
+      <%= render 'form', f: f %>
+    </div>
+    <div class="action" id="update">
+      <%= f.submit "Update", class: "btn btn-large btn-primary" %>
+    </div>
+    <div id="cancel">
+      <%= link_to 'Cancel', reports_path, class: "btn btn-large" %>
+    </div>
+  <% end %>
+</div>

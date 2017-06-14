@@ -4,6 +4,6 @@ class AddHideColumnToEmployeesTable < ActiveRecord::Migration[5.0]
   end
 
   def down
-    delete_column :employees, :hide
+    remove_column :employees, :hide
   end
 end

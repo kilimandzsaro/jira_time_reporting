@@ -11,7 +11,6 @@ class ReportsController < ApplicationController
   # GET /reports/1
   # GET /reports/1.json
   def show
-    @report = Report.find(params[:id])
   end
 
   # GET /reports/new
@@ -19,26 +18,53 @@ class ReportsController < ApplicationController
     @report = Report.new
   end
 
-  # GET /reports/1/edit
-  def edit
+  def get_report
+    # ReportResult.create(params)
+    # redirect_to new_report_result_path(params[:report_id])
+    report = Report.find(params[:report_id])
+
+    EmployeesReportType.where(report_type_id: report.report_type_id).each do |employee|
+      rrs = ReportResultsService.new(report.from_date, report.to_date, employee.employee_id, report.id)
+      rrs.set_spent_times
+    end
+
+    EmployeesReportType.where(report_type_id: report.report_type_id).each do |employee|
+      rrs = ReportResultsService.new(report.from_date, report.to_date, employee.employee_id, report.id)
+      rrs.set_calculated_work_hours
+    end
+
+    redirect_to report_results_path
   end
 
-  def get
-    project = "INBT"
-    auth = "bmF0YWxpYS5iYWtvc0BpbmJhbmsuZWU6TGl2ZUBuZGxldGwxdmVUcnVlRnIzZWRvbQ=="
-    connect_to_jira = GetJiraResponseService.new("application/json", "Basic #{auth}")
+  def get_results
+    @report = Report.find(params[:report_id])
+    report_type_id = @report.report_type_id
+    @issue_list = Array.new
+    ReportResult.where(report_id: @report.id).each {|rr| @issue_list.push(rr.issue_id)}
+    # define the big report hash for showing the results
+    @report_data = Hash.new do |hash, key|
+      hash[key] = Hash.new do |hash, key|
+        hash[key] = Hash.new
+      end
+    end
 
-    components = Array.new
-    components = connect_to_jira.project_components(project)
+    # fill the hash
+    BusinessesReportType.where(report_type_id: report_type_id).each do |brt|
+      ProjectsReportType.where(report_type_id: report_type_id).each do |prt|
+        EmployeesReportType.where(report_type_id: report_type_id).each do |ert|
+          @report_data[brt.business_id][prt.project_id][ert.employee_id] = Array.new
+          ReportResult.where(report_id: @report.id).where(employee_id: ert.employee_id).each do |rr|
+            if (Issue.find(rr.issue_id).project_id == prt.project_id) && (!BusinessesIssue.where(issue_id: rr.issue_id).where(business_id: brt.id).empty?)
+              @report_data[brt.business_id][prt.project_id][ert.employee_id].push(rr.issue_id)
+            end
+          end
+        end
+      end
+    end
+  end
 
-    cs = ComponentsService.new
-    cs.add_new_components(components)
-
-    issues = Array.new
-    issues = connect_to_jira.all_issues(project)
-
-    is = IssuesService.new
-    is.add_new_issues(issues)
+  # GET /reports/1/edit
+  def edit
   end
 
   # POST /reports
@@ -61,7 +87,7 @@ class ReportsController < ApplicationController
   # PATCH/PUT /reports/1.json
   def update
     respond_to do |format|
-      if @report.update(report_params)
+      if @report.save
         format.html { redirect_to @report, notice: 'Report was successfully updated.' }
         format.json { render :show, status: :ok, location: @report }
       else
@@ -74,6 +100,7 @@ class ReportsController < ApplicationController
   # DELETE /reports/1
   # DELETE /reports/1.json
   def destroy
+    ReportResult.where("report_id = ?", @report.id).each { |rr| rr.destroy}
     @report.destroy
     respond_to do |format|
       format.html { redirect_to reports_url, notice: 'Report was successfully destroyed.' }
@@ -88,12 +115,9 @@ class ReportsController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    #  "report"=>{"name"=>"first", "from_date"=>"2017-04-01", "to_date"=>"2017-04-30", "settings"=>["", "32", "", "2", "", ""]}
     def report_params
-      params.require(:report).permit(:name, :from_date, :to_date, 
-          { settings: 
-            [{report_type: :id}, {employee_ids: :id}, {component_ids: :id}, {business_ids: :id} ] }
-        )
+      params.require(:report).permit(:name, :from_date, :to_date, :report_type_id )
+      # params.require(:report).permit!
     end
 
     def signed_in_user

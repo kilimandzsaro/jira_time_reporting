@@ -17,12 +17,15 @@ class ReportTypesController < ApplicationController
     set_report_type
   end
 
+  def show
+    set_report_type
+  end
+
   # PATCH/PUT /report_types/1
   def update
-    @report_type = ReportType.find(params[:id])
-    p "-----#{@report_type}"
+    set_report_type
     respond_to do |format|
-      if @report_type.update_attributes(update_report_type_params["report_types"])
+      if @report_type.update_attributes(update_report_type_params)
         format.html do
           redirect_to report_types_path
         end
@@ -37,7 +40,13 @@ class ReportTypesController < ApplicationController
   # POST /report_types
   # POST /report_types.json
   def create
-    @report_type = ReportType.new(update_report_type_params["report_types"])
+    @report_type = ReportType.new(update_report_type_params)
+    @report_type.employee_ids.shift
+    @report_type.component_ids.shift
+    @report_type.project_ids.shift
+    @report_type.business_ids.shift
+    @report_type.status_ids.shift
+    p "RT: #{@report_type.employee_ids}"
 
     respond_to do |format|
       if @report_type.save!
@@ -58,6 +67,11 @@ class ReportTypesController < ApplicationController
   # DELETE /report_types/1.json
   def destroy
     @report_type = ReportType.find(params[:id])
+    BusinessesReportType.where("report_type_id = ?", @report_type.id).each {|brt| brt.destroy}
+    ComponentsReportType.where("report_type_id = ?", @report_type.id).each {|crt| crt.destroy}
+    EmployeesReportType.where("report_type_id = ?", @report_type.id).each {|ert| ert.destroy}
+    ProjectsReportType.where("report_type_id = ?", @report_type.id).each {|prt| prt.destroy}
+    StatusesReportType.where("report_type_id = ?", @report_type.id).each {|srt| srt.destroy}
     @report_type.destroy
     respond_to do |format|
       format.html { redirect_to report_types_url, notice: 'Report type was successfully destroyed.' }
@@ -72,7 +86,8 @@ class ReportTypesController < ApplicationController
     end
 
     def update_report_type_params
-      params.require(:report_type).permit(report_types: [:id, :report_type])
+      params.require(:report_type).permit(:name, :employee_ids => [], :component_ids => [], :business_ids => [], :project_ids => [], :status_ids => [])
+      # params.require(:report_type).permit!
     end
 
 end

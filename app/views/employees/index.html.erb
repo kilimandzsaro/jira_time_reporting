@@ -7,6 +7,8 @@
         <th>Name</th>
         <th>Email</th>
         <th>Status</th>
+        <th>Jira key</th>
+        <th>Jira display name</th>
         <th>Hide?</th>
         <th colspan="3"></th>
       </tr>
@@ -18,19 +20,35 @@
           <tr>
             <td><%= employee.name %></td>
             <td><%= employee.email %></td>
-            <td><%= employee.status %></td>
-            <td><%= link_to 'Hide', hide_and_show_employee_path(employee) %></td>
+            <td>
+              <% if employee.active? %>
+               <font color="#17CA05">Active</font>
+              <% else %>
+                <font color="#C60606">Inactive</font>
+              <% end %>
+            </td>
+            <td><%= employee.key %></td>
+            <td><%= employee.display_name %></td>
+            <td><%= link_to 'Hide', employee_hide_and_show_path(employee) %></td>
             <td><%= link_to 'Edit', edit_employee_path(employee) %></td>
           </tr>
         <% else %>
           <tr>
             <td><%= employee.name %></td>
             <td><%= employee.email %></td>
-            <td><%= employee.status %></td>
+            <td>
+              <% if employee.active? %>
+               <font color="#17CA05">Active</font>
+              <% else %>
+                <font color="#C60606">Inactive</font>
+              <% end %>
+            </td>
+            <td><%= employee.key %></td>
+            <td><%= employee.display_name %></td>
             <% if employee.hide %>
-              <td><%= link_to 'Show', hide_and_show_employee_path(employee) %></td>
+              <td><%= link_to 'Show', employee_hide_and_show_path(employee) %></td>
             <% else %>
-              <td><%= link_to 'Hide', hide_and_show_employee_path(employee) %></td>
+              <td><%= link_to 'Hide', employee_hide_and_show_path(employee) %></td>
             <% end %>
             <td><%= link_to 'Edit', edit_employee_path(employee) %></td>
           </tr>
@@ -38,4 +56,5 @@
       <% end %>
     </tbody>
   </table>
+  <td><%= link_to 'Refresh', refresh_employees_path %></td>
 </div>
