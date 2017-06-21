@@ -6,10 +6,3 @@ one:
 two:
   name: second
 
-project1:
-  prefix: DT
-  name: Digital
-
-project2:
-  prefix: BUG
-  name: Bug
