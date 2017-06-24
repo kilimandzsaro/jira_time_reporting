@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  jira_name: MyString
-  name: MyString
-  price: 9.99
+  jira_name: Free
+  name: Business free
+  price: 0.00
 
 two:
-  jira_name: MyString
-  name: MyString
+  jira_name: Payable
+  name: Need to pay for it
   price: 9.99

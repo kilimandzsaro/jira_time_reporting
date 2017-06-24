@@ -1,9 +1,10 @@
-<%= f.fields_for :employees do |employee| %>
-  <%= employee.text_field :name, value: @employee.name, :class => "form-control" %>
-  <%= employee.text_field :email, value: @employee.email, :class => "form-control", :readonly => true %>
-  <%= employee.text_field :active, value: @employee.active, :class => "form-control", :readonly => true %>
-  <% employee.issue_history.each do |ih| %>
-    <%= IssueHistory.find(ih).jira_name %>-<%= ih %>
-  <% end %>
-  <%= empolyee.collection_select :key, {1 => 'true', 2 => 'false'}, :key, :value, :class=> "form-control" %>
+<%= f.fields_for :employees do |f| %>
+  <%= f.label :Jira_user %>
+  <%= f.text_field :name, value: @employee.name, :class => "form-control" %>
+  <%= f.label :email %>
+  <%= f.text_field :email, value: @employee.email, :class => "form-control", :readonly => true %>
+  <%= f.label "Activity status" %>
+  <%= f.text_field :active, value: @employee.active, :class => "form-control", :readonly => true %>
+  <%= f.label "Hide?" %>
+  <%= f.select(:hide, options_for_select([['Yes', true], ['No', false]], {:selected => @employee.hide})) %>
 <% end %>
