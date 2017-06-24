@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   end
   get 'reports/index'
 
-  resources :employees, :except => [:destroy] do
+  resources :employees, :except => [:destroy, :create, :new] do
     get :hide_and_show
     collection do
       get :refresh, to: "employees#refresh"

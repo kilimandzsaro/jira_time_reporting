@@ -1,6 +1,7 @@
 <div class="col-md-7 col-md-offset-3 main">
   <% provide(:title, "Employees")%>
   <center><h1>Employees</h1></center>
+  <%= link_to 'Refresh', refresh_employees_path %>
   <table>
     <thead>
       <tr>
@@ -18,7 +19,7 @@
       <% @employees.each do |employee| %>
         <% if !employee.hide && !@show_all %>
           <tr>
-            <td><%= employee.name %></td>
+            <td><%= link_to employee.name, employee_path(employee) %></td>
             <td><%= employee.email %></td>
             <td>
               <% if employee.active? %>
@@ -56,5 +57,5 @@
       <% end %>
     </tbody>
   </table>
-  <td><%= link_to 'Refresh', refresh_employees_path %></td>
+  <%= link_to 'Refresh', refresh_employees_path %>
 </div>
