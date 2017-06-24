@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611192342) do
+ActiveRecord::Schema.define(version: 20170624200747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,22 @@ ActiveRecord::Schema.define(version: 20170611192342) do
     t.index ["project_id"], name: "index_issues_on_project_id", using: :btree
   end
 
+  create_table "overtimes", force: :cascade do |t|
+    t.date     "start_date"
+    t.date     "end_date"
+    t.integer  "employee_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["employee_id"], name: "index_overtimes_on_employee_id", using: :btree
+  end
+
+  create_table "overtimes_reports", force: :cascade do |t|
+    t.integer "overtime_id"
+    t.integer "report_id"
+    t.index ["overtime_id"], name: "index_overtimes_reports_on_overtime_id", using: :btree
+    t.index ["report_id"], name: "index_overtimes_reports_on_report_id", using: :btree
+  end
+
   create_table "projects", force: :cascade do |t|
     t.string   "prefix"
     t.string   "name"
@@ -196,6 +212,22 @@ ActiveRecord::Schema.define(version: 20170611192342) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  create_table "vacations", force: :cascade do |t|
+    t.date     "start_date"
+    t.date     "end_date"
+    t.integer  "employee_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["employee_id"], name: "index_vacations_on_employee_id", using: :btree
+  end
+
+  create_table "vacations_reports", force: :cascade do |t|
+    t.integer "vacation_id"
+    t.integer "report_id"
+    t.index ["report_id"], name: "index_vacations_reports_on_report_id", using: :btree
+    t.index ["vacation_id"], name: "index_vacations_reports_on_vacation_id", using: :btree
+  end
+
   add_foreign_key "businesses_issues", "businesses"
   add_foreign_key "businesses_issues", "issues"
   add_foreign_key "businesses_report_types", "businesses"
@@ -210,6 +242,9 @@ ActiveRecord::Schema.define(version: 20170611192342) do
   add_foreign_key "issue_histories", "issues"
   add_foreign_key "issue_histories", "statuses"
   add_foreign_key "issues", "projects"
+  add_foreign_key "overtimes", "employees"
+  add_foreign_key "overtimes_reports", "overtimes"
+  add_foreign_key "overtimes_reports", "reports"
   add_foreign_key "projects_report_types", "projects"
   add_foreign_key "projects_report_types", "report_types"
   add_foreign_key "report_results", "employees"
@@ -218,4 +253,7 @@ ActiveRecord::Schema.define(version: 20170611192342) do
   add_foreign_key "reports", "report_types"
   add_foreign_key "statuses_report_types", "report_types"
   add_foreign_key "statuses_report_types", "statuses"
+  add_foreign_key "vacations", "employees"
+  add_foreign_key "vacations_reports", "reports"
+  add_foreign_key "vacations_reports", "vacations"
 end

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>From date:</strong>
+  <%= @vacation.from_date %>
+</p>
+
+<p>
+  <strong>To date:</strong>
+  <%= @vacation.to_date %>
+</p>
+
+<p>
+  <strong>Employee:</strong>
+  <%= @vacation.employee %>
+</p>
+
+<%= link_to 'Edit', edit_vacation_path(@vacation) %> |
+<%= link_to 'Back', vacations_path %>
