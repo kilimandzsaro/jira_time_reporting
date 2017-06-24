@@ -1,48 +1,20 @@
 class VacationsController < ApplicationController
-  before_action :set_vacation, only: [:show, :edit, :update, :destroy]
-
-  # GET /vacations
-  def index
-    @vacations = Vacation.all
-  end
-
-  # GET /vacations/1
-  def show
-  end
-
-  # GET /vacations/new
-  def new
-    @vacation = Vacation.new
-  end
-
-  # GET /vacations/1/edit
-  def edit
-  end
+  before_action :set_vacation, only: [:update, :destroy]
 
   # POST /vacations
   def create
     @vacation = Vacation.new(vacation_params)
-
-    if @vacation.save
-      redirect_to @vacation, notice: 'Vacation was successfully created.'
-    else
-      render :new
-    end
+    @vacation.save!
   end
 
   # PATCH/PUT /vacations/1
   def update
-    if @vacation.update(vacation_params)
-      redirect_to @vacation, notice: 'Vacation was successfully updated.'
-    else
-      render :edit
-    end
+    @vacation.update!(vacation_params)
   end
 
   # DELETE /vacations/1
   def destroy
     @vacation.destroy
-    redirect_to vacations_url, notice: 'Vacation was successfully destroyed.'
   end
 
   private
@@ -53,6 +25,6 @@ class VacationsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def vacation_params
-      params.require(:vacation).permit(:from_date, :to_date, :employee_id)
+      params.require(:vacation).permit(:start_date, :end_date, :employee_id)
     end
 end

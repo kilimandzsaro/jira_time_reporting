@@ -3,17 +3,19 @@ require 'test_helper'
 class OvertimesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @overtime = overtimes(:one)
+    @overtime.employee_id = Employee.first.id
+    @overtime.save!
   end
 
   test "should create overtime" do
     assert_difference('Overtime.count') do
-      post overtimes_url, params: { overtime: { employee_id: @overtime.employee_id, from_date: @overtime.from_date, to_date: @overtime.to_date } }
+      post overtimes_url, params: { overtime: { employee_id: @overtime.employee_id, start_date: @overtime.start_date, end_date: @overtime.end_date } }
     end
   end
 
   test "should update overtime" do
-    patch overtime_url(@overtime), params: { overtime: { employee_id: @overtime.employee_id, from_date: @overtime.from_date, to_date: @overtime.to_date - 1 } }
-    assert_not_equal(@overtime.to_date, @overtime.reload.to_date)
+    patch overtime_url(@overtime), params: { overtime: { employee_id: @overtime.employee_id, start_date: @overtime.start_date, end_date: @overtime.end_date - 1 } }
+    assert_not_equal(@overtime.end_date, @overtime.reload.end_date)
   end
 
   test "should destroy overtime" do
