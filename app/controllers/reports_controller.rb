@@ -38,33 +38,15 @@ class ReportsController < ApplicationController
 
   def get_results
     @report = Report.find(params[:report_id])
-    report_type_id = @report.report_type_id
-    @issue_list = Array.new
-    ReportResult.where(report_id: @report.id).each {|rr| @issue_list.push(rr.issue_id)}
-    # define the big report hash for showing the results
-    @report_data = Hash.new do |hash, key|
-      hash[key] = Hash.new do |hash, key|
-        hash[key] = Hash.new
-      end
-    end
-
-    # fill the hash
-    BusinessesReportType.where(report_type_id: report_type_id).each do |brt|
-      ProjectsReportType.where(report_type_id: report_type_id).each do |prt|
-        EmployeesReportType.where(report_type_id: report_type_id).each do |ert|
-          @report_data[brt.business_id][prt.project_id][ert.employee_id] = Array.new
-          ReportResult.where(report_id: @report.id).where(employee_id: ert.employee_id).each do |rr|
-            if (Issue.find(rr.issue_id).project_id == prt.project_id) && (!BusinessesIssue.where(issue_id: rr.issue_id).where(business_id: brt.id).empty?)
-              @report_data[brt.business_id][prt.project_id][ert.employee_id].push(rr.issue_id)
-            end
-          end
-        end
-      end
-    end
+    @results = FullReportResultsView.where(report_id: @report.id)
+    @businesses = FullReportResultsView.select([:business]).where(report_id: @report.id).group(:business).order(:business)
+    @projects = FullReportResultsView.select([:project]).where(report_id: @report.id).group(:project).order(:project)
   end
 
   # GET /reports/1/edit
   def edit
+    @vacations = Vacation.new
+    @overtimes = Overtime.new
   end
 
   # POST /reports
@@ -116,7 +98,7 @@ class ReportsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def report_params
-      params.require(:report).permit(:name, :from_date, :to_date, :report_type_id )
+      params.require(:report).permit(:name, :from_date, :to_date, :report_type_id)
       # params.require(:report).permit!
     end
 

@@ -2,74 +2,63 @@
   <% provide(:title, "Results for #{@report.id} Report")%>
   <center><h1>Result of <%= @report.name %></h1></center>
 
-  <% @report_data.each do |business, proj_hash| %>
-    <% business_sum = 0.0 %>
-    <% BusinessesIssue.where(business_id: business).where("issue_id IN ( ? )", @issue_list).each { |bi| business_sum += ReportResult.where(issue_id: bi.issue_id).where(report_id: @report.id).sum(:calculated) } %>
+  <div class="col-md-7">
     
-    <div class="col-md-7 col-md-offset-3 header">
-      <table class="table-hover col-md-12">
-        <thead>
-          <tr>
-            <th><h3><%= Business.find(business).name %></h3></th>
-            <th><h3><%= business_sum.round(2) %> h</h3></th>
-            <th><h3><%= (business_sum * Business.find(business).price).round(2) %> €</h3></th>
-          </tr>
-        </thead>
-      </table>
-    </div>
-
-    <div class="col-md-12 col-md-offset-3 main">
-      <table class="table-hover">
-        <% proj_hash.each do |project, emp_hash| %>
+    <% @businesses.each do |b| %>
+      
+      <div class="col-md-12 col-md-offset-3 header">
+        <table class="table-hover col-md-12">
+          <% business_sum = FullReportResultsView.where(report_id: @report.id).where(business: b.business).sum(:calculated) %>
           <thead>
             <tr>
-              <th><%= Project.find(project).name if !emp_hash.values.empty? %></th>
+              <th><h3><%= b.business %></h3></th>
+              <th><h3><%= business_sum.round(2) %> h</h3></th>
+              <th><h3><font color="#8E24DC"><%= (business_sum * Business.find_by_name(b.business).price).round(2) %> €</font></h3></th>
             </tr>
           </thead>
+        </table>
+      </div>
 
-          <% emp_hash.each do |employee, value| %>
-            <% sum = 0.0 %>
-            <% value.each { |v| sum += ReportResult.where(:issue_id => v).where(:employee_id => employee).first.calculated } %>
-            <tbody>
+      <% FullReportResultsView.select([:project]).where(report_id: @report.id).where(business: b.business).group(:project).order(:project).each do |pr| %>
+        <div class="col-md-12 col-md-offset-3 main">
+          <table class="table-hover col-md-12">
+          <% project_sum = FullReportResultsView.where(report_id: @report.id).where(business: b.business).where(project: pr.project).sum(:calculated) %>
+            <thead>
               <tr>
-                <% if sum > 0.0 %>
-                  <div class="col-md-12 col-md-offset-3 main">
-                    <table class="table-bordered">
-                      <thead>
-                        <tr>
-                          <th><%= Employee.find(employee).display_name %></th>
-                          <th><b><font color="#8E24DC"><%= sum.round(2) %> h</font></b></th>
-                          <th><b><font color="#8E24DC"><%= (sum * Business.find(business).price).round(2) %> € </font></b></th>
-                          <th></th>
-                          <th colspan="4"></th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <% value.each do |v| %>
-                          <tr>
-                            <td><%= Issue.find(v).issue_key %> - <%= Issue.find(v).title %></td>
-                            <td><%= ReportResult.where(:issue_id => v).where(:employee_id => employee).first.calculated.round(2) %> h</td>
-                            <td><%= (ReportResult.where(:issue_id => v).where(:employee_id => employee).first.calculated * Business.find(business).price).round(2) %> €</td>
-                            <td>
-                              <% ComponentsIssue.where(:issue_id => v).each do |comp| %>
-                                <%= Component.find(comp.component_id).name %><br>
-                              <% end %>
-                            </td>
-                          </tr>
-                        <% end %>
-                      </tbody>
-                    </table>
-                    <br>
-                  </div>
-                <% end %>
+                <th><h4><%= pr.project %></h4></th>
+                <th><h4><%= project_sum.round(2) %> h</h4></th>
+                <th><h4><font color="#8E24DC"><%= (project_sum * Business.find_by_name(b.business).price).round(2) %> €</font></h4></th>
               </tr>
-            </tbody>
-          <% end %>
-        <% end %>
-      </table>
-    </div>
+            </thead>
+          </table>
+        </div>
 
-  <% end %>
+        <% FullReportResultsView.select([:employee]).where(report_id: @report.id).where(business: b.business).where(project: pr.project).group(:employee).order(:employee).each do |e| %>
+          <div class="col-md-12 col-md-offset-3 body">
+            <table class="table-bordered col-md-12">
+
+              <% employee_sum = FullReportResultsView.where(report_id: @report.id).where(business: b.business).where(project: pr.project).where(employee: e.employee).sum(:calculated) %>
+
+              <thead>
+                <th><%= e.employee %></th>
+                <th><%= employee_sum.round(2) %> h</th>
+                <th><font color="#8E24DC"><%= (employee_sum * Business.find_by_name(b.business).price).round(2) %> €</font></th>
+              </thead>
+
+              <tbody>
+                <% FullReportResultsView.select([:issue_key, :issue_title, :calculated]).where(report_id: @report.id).where(business: b.business).where(project: pr.project).where(employee: e.employee).order(:issue_key).each do |i| %>
+                  <tr>
+                    <td><%= i.issue_key %> - <%= i.issue_title %></td>
+                    <td><%= i.calculated.round(2) %> h</td>
+                    <td><%= (i.calculated.round(2) * Business.find_by_name(b.business).price).round(2) %> €</td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
 </div>
 <%= link_to 'Back', reports_path %>
