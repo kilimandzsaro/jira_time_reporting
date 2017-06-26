@@ -1,0 +1,21 @@
+<% if @result_view.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@result_view.errors.count, "error") %> prohibited this result view from being saved:</h2>
+
+    <ul>
+      <% @result_view.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="field" id="template_name">
+  <%= f.label :result_view_template %>
+  <%= f.text_field :name, autofocus: true, placeholder: "Result view template's name", :class => "form-control" %>
+</div>
+
+<div class="field" id="template">
+  <%= f.label :template %>
+  <%= f.text_area :template, cols: "75", rows: "10" %>
+</div>

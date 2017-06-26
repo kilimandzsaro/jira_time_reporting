@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170625190858) do
+ActiveRecord::Schema.define(version: 20170626105917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -172,6 +172,13 @@ ActiveRecord::Schema.define(version: 20170625190858) do
     t.datetime "updated_at",     null: false
     t.integer  "report_type_id"
     t.index ["report_type_id"], name: "index_reports_on_report_type_id", using: :btree
+  end
+
+  create_table "result_views", force: :cascade do |t|
+    t.string   "name"
+    t.string   "template"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "statuses", force: :cascade do |t|
