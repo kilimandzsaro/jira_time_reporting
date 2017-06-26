@@ -17,7 +17,7 @@ class ResultViewsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create result_view" do
     assert_difference('ResultView.count') do
-      post result_views_url, params: { result_view: {  } }
+      post result_views_url, params: { result_view: { name: 'New one', template: 'some template' } }
     end
 
     assert_redirected_to result_view_url(ResultView.last)
@@ -34,7 +34,9 @@ class ResultViewsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update result_view" do
-    patch result_view_url(@result_view), params: { result_view: {  } }
+    patch result_view_url(@result_view), params: { result_view: { template: 'new one' } }
+    assert_not_equal(@result_view.template, @result_view.reload.template)
+    assert_equal('new one', @result_view.reload.template)
     assert_redirected_to result_view_url(@result_view)
   end
 
