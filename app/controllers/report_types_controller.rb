@@ -46,7 +46,6 @@ class ReportTypesController < ApplicationController
     @report_type.project_ids.shift
     @report_type.business_ids.shift
     @report_type.status_ids.shift
-    p "RT: #{@report_type.employee_ids}"
 
     respond_to do |format|
       if @report_type.save!

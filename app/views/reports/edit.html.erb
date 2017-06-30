@@ -1,16 +1,32 @@
 <div class="col-md-7 col-md-offset-3 main">
   <% provide(:title, "Reports") %>
   <center><h1>Edit reports</h1></center>
-  <%= form_for(@report) do |f| %>
-    <%= render 'shared/error_messages' %>
-    <div class="col-md-12">
-      <%= render 'form', f: f %>
-    </div>
-    <div class="action" id="update">
-      <%= f.submit "Update", class: "btn btn-large btn-primary" %>
-    </div>
-    <div id="cancel">
-      <%= link_to 'Cancel', reports_path, class: "btn btn-large" %>
-    </div>
-  <% end %>
+  <div class='input_group'>
+    <%= form_for(@report) do |f| %>
+      <%= render 'shared/error_messages' %>
+      <div class="col-md-12">
+        <%= render 'form', f: f %>
+      </div>
+
+      <%= form_for(@vacations) do |f| %>
+        <%= render 'shared/error_messages' %>
+        <div class="col-md-12">
+          <%= render 'form_for_vacations', f: f %>
+        </div>
+      <% end %>
+      <%= form_for(@overtimes) do |f| %>
+        <%= render 'shared/error_messages' %>
+        <div class="col-md-12">
+          <%= render 'form_for_overtimes', f: f %>
+        </div>
+      <% end %>
+
+      <div class="action" id="update">
+        <%= f.submit "Update", class: "btn btn-large btn-primary" %>
+      </div>
+      <div id="cancel">
+        <%= link_to 'Cancel', reports_path, class: "btn btn-large" %>
+      </div>
+    <% end %>
+  </div>
 </div>

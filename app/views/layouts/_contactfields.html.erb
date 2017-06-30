@@ -1,4 +1,8 @@
 <%= f.fields_for @user do |user|%>
-	<%= user.text_field :email, placeholder: "Email", :class => "form-control", readonly: true %>
-	<%= user.text_field :username, placholder: "Username", :class => "form-control" %>
+  <div class="field">
+	 <%= user.text_field :email, placeholder: "Email", :class => "form-control", readonly: true %>
+  </div>
+  <div class="field">
+	 <%= user.text_field :username, placholder: "Username", :class => "form-control" %>
+  </div>
 <% end %>

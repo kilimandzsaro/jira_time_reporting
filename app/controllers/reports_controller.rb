@@ -38,9 +38,10 @@ class ReportsController < ApplicationController
 
   def get_results
     @report = Report.find(params[:report_id])
-    @results = FullReportResultsView.where(report_id: @report.id)
-    @businesses = FullReportResultsView.select([:business]).where(report_id: @report.id).group(:business).order(:business)
-    @projects = FullReportResultsView.select([:project]).where(report_id: @report.id).group(:project).order(:project)
+    # @results = FullReportResultsView.where(report_id: @report.id)
+    # @businesses = FullReportResultsView.select([:business]).where(report_id: @report.id).group(:business).order(:business)
+    # @projects = FullReportResultsView.select([:project]).where(report_id: @report.id).group(:project).order(:project)
+    @templates = ResultView.all
   end
 
   # GET /reports/1/edit
