@@ -1,0 +1,21 @@
+<% if @show_result.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@show_result.errors.count, "error") %> prohibited this show result from being saved:</h2>
+
+    <ul>
+      <% @show_result.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="field" id="template_name">
+  <%= f.label :show_result_template %>
+  <%= f.text_field :name, autofocus: true, placeholder: "View template's name", :class => "form-control" %>
+</div>
+
+<div class="field" id="template">
+  <%= f.label :template %>
+  <%= f.text_area :template, cols: "75", rows: "10" %>
+</div>

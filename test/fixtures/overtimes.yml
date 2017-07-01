@@ -3,9 +3,9 @@
 one:
   start_date: 2017-06-14
   end_date: 2017-06-15
-  employee_id: 1
+  hours: 1
 
 two:
   start_date: 2017-06-12
   end_date: 2017-06-14
-  employee_id: 2
+  hours: 2

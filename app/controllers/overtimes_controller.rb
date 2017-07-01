@@ -4,7 +4,11 @@ class OvertimesController < ApplicationController
   # POST /overtimes
   def create
     @overtime = Overtime.new(overtime_params)
-    @overtime.save!
+    respond_to do |format|
+      if @overtime.save
+        format.js {render inline: "location.reload();" }
+      end
+    end
   end
 
   # PATCH/PUT /overtimes/1
@@ -25,6 +29,6 @@ class OvertimesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def overtime_params
-      params.require(:overtime).permit(:start_date, :end_date, :employee_id)
+      params.require(:overtime).permit(:start_date, :end_date, :employee_id, :report_id, :hours)
     end
 end

@@ -119,7 +119,7 @@ class IssueHistoriesService
     ih.status_id = status_id
     ih.start_date = start_date
     ih.employee_id = employee_id unless employee_id == 0
-    ih.save!
+    ih.save
   end
   
 end

@@ -1,0 +1,17 @@
+<div class="col-md-7 col-md-offset-3 main">
+  <% provide(:title, "Result view template")%>
+  <center><h1><%= @show_result.name %></h1></center>
+  <table>
+    <tbody>
+      <tr>
+        <td><%= @show_result.template %></td>
+      </tr>
+      <tr>
+        <td><%= button_to 'Edit', edit_show_result_path(@show_result), method: :get, class: 'btn btn-info btn-xs' %>
+        <%= link_to 'Destroy', @show_result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<%= link_to 'Back', show_result_path %>
+

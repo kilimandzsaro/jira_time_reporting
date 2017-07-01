@@ -16,6 +16,8 @@ class ReportsController < ApplicationController
   # GET /reports/new
   def new
     @report = Report.new
+    @vacation = Vacation.new
+    @overtime = Overtime.new
   end
 
   def get_report
@@ -41,13 +43,13 @@ class ReportsController < ApplicationController
     # @results = FullReportResultsView.where(report_id: @report.id)
     # @businesses = FullReportResultsView.select([:business]).where(report_id: @report.id).group(:business).order(:business)
     # @projects = FullReportResultsView.select([:project]).where(report_id: @report.id).group(:project).order(:project)
-    @templates = ResultView.all
+    @templates = ShowResult.all
   end
 
   # GET /reports/1/edit
   def edit
-    @vacations = Vacation.new
-    @overtimes = Overtime.new
+    @vacation = Vacation.new
+    @overtime = Overtime.new
   end
 
   # POST /reports
@@ -57,6 +59,8 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       if @report.save
+        update_vacation_report_id
+        update_overtime_report_id
         format.html { redirect_to @report, notice: 'Report was successfully created.' }
         format.json { render :show, status: :created, location: @report }
       else
@@ -83,7 +87,9 @@ class ReportsController < ApplicationController
   # DELETE /reports/1
   # DELETE /reports/1.json
   def destroy
-    ReportResult.where("report_id = ?", @report.id).each { |rr| rr.destroy}
+    ReportResult.where(report_id: @report.id).each { |rr| rr.destroy}
+    Vacation.where(report_id: @report.id).each { |v| v.destroy }
+    Overtime.where(report_id: @report.id).each { |o| o.destroy }
     @report.destroy
     respond_to do |format|
       format.html { redirect_to reports_url, notice: 'Report was successfully destroyed.' }
@@ -101,6 +107,20 @@ class ReportsController < ApplicationController
     def report_params
       params.require(:report).permit(:name, :from_date, :to_date, :report_type_id)
       # params.require(:report).permit!
+    end
+
+    def update_overtime_report_id
+      Overtime.where(report_id: nil).each do |o|
+        o.report_id = @report.id
+        o.save!
+      end
+    end
+
+    def update_vacation_report_id
+      Vacation.where(report_id: nil).each do |v|
+        v.report_id = @report.id
+        v.save!
+      end
     end
 
     def signed_in_user

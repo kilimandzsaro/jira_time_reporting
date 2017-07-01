@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :result_views
+  resources :show_results
   resources :overtimes, :except => [:index, :edit, :show, :new]
   resources :vacations, :except => [:index, :edit, :show, :new]
   resources :report_results, :except => [:edit, :show, :destroy]

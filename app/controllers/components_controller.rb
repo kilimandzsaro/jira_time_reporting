@@ -15,7 +15,7 @@ class ComponentsController < ApplicationController
   # POST /components.json
   def create
     @component = Component.new(component_params)
-    @component.save!
+    @component.save
   end
 
   private

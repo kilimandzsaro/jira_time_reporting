@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ResultViewTest < ActiveSupport::TestCase
+class ShowResultTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

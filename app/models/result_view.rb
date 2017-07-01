@@ -1,2 +1,0 @@
-class ResultView < ApplicationRecord
-end

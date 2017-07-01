@@ -19,13 +19,13 @@
         <td><%= @report.from_date %></td>
         <td><%= @report.to_date %></td>
         <td>
-          <% VacationsReport.where("report_id = ?", @report.id).each do |vr| %>
-            <%= Employee.find(vr.employee_id).display_name %>: <%= Vacation.find(vr.id).start_date %> - <%= Vacation.find(vr.id).end_date %><br>
+          <% Vacation.where(report_id: @report.id).each do |v| %>
+            <%= Employee.find(v.employee_id).display_name %><br>
           <% end %>
         </td>
         <td>
-          <% OvertimesReport.where("report_id = ?", @report.id).each do |otr| %>
-            <%= Employee.find(otr.employee_id).display_name %>: <%= Overtime.find(otr.id).start_date %> - <%= Overtime.find(vr.id).end_date %><br>
+          <% Overtime.where(report_id: @report.id).each do |o| %>
+            <%= Employee.find(o.employee_id).display_name %><br>
           <% end %>
         </td>
         <td><%= button_to 'Get', report_get_report_path(@report), method: :get, class: 'btn btn-info btn-xs' %></td>

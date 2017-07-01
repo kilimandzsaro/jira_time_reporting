@@ -1,7 +1,7 @@
 <div class="col-md-6 col-md-push-3">
   <%= provide(:title, "New view template") %>
   <center><h1 >Create new template</h1></center>
-  <%= form_for(@result_view) do |f| %>
+  <%= form_for(@show_result) do |f| %>
     <div class="col-md-12">
       <%= render 'shared/error_messages' %>
     <div class="col-md-12">
@@ -11,7 +11,7 @@
         <%= f.submit "Create", class: "btn btn-large btn-primary" %>
       </div>
       <div id="cancel">
-        <%= link_to 'Cancel', result_views_path, class: "btn btn-large" %>
+        <%= link_to 'Cancel', show_results_path, class: "btn btn-large" %>
       </div>
     </div>
   <% end %>  

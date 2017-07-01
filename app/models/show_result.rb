@@ -1,0 +1,2 @@
+class ShowResult < ApplicationRecord
+end

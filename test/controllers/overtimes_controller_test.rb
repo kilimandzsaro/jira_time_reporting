@@ -4,17 +4,18 @@ class OvertimesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @overtime = overtimes(:one)
     @overtime.employee_id = Employee.first.id
+    @overtime.report_id = Report.first.id
     @overtime.save!
   end
 
   test "should create overtime" do
     assert_difference('Overtime.count') do
-      post overtimes_url, params: { overtime: { employee_id: @overtime.employee_id, start_date: @overtime.start_date, end_date: @overtime.end_date } }
+      post overtimes_url, params: { overtime: { employee_id: @overtime.employee_id, report_id: @overtime.report_id, hours: @overtime.hours, start_date: @overtime.start_date, end_date: @overtime.end_date } }
     end
   end
 
   test "should update overtime" do
-    patch overtime_url(@overtime), params: { overtime: { employee_id: @overtime.employee_id, start_date: @overtime.start_date, end_date: @overtime.end_date - 1 } }
+    patch overtime_url(@overtime), params: { overtime: { employee_id: @overtime.employee_id, report_id: @overtime.report_id, hours: @overtime.hours, start_date: @overtime.start_date, end_date: @overtime.end_date } }
     assert_not_equal(@overtime.end_date, @overtime.reload.end_date)
   end
 
