@@ -38,8 +38,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'httparty'
 gem 'devise'
 
-gem 'will_paginate', '~> 3.1.0'
-gem 'will_paginate-bootstrap'
+gem 'kaminari'
 
 gem 'business_time'
 gem 'holidays', :git => 'https://github.com/holidays/holidays'

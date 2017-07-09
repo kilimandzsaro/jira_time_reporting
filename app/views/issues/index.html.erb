@@ -1,7 +1,7 @@
 <div class="col-md-7 col-md-offset-3 main">
   <% provide(:title, "Issues")%>
   <center><h1>Issues</h1></center>
-  <%= will_paginate @issues, renderer: BootstrapPagination::Rails %>
+  <%= paginate @issues %>
   <table>
     <thead>
       <tr>
@@ -20,5 +20,5 @@
       <% end %>
     </tbody>
   </table>
-  <%= will_paginate @issues, renderer: BootstrapPagination::Rails%>
+  <%= paginate @issues %>
 </div>
