@@ -7,7 +7,7 @@ one:
   active: false
 
 two:
-  name: MyString
+  name: Second
   url: MyString
   base64_key: MyString
   active: false

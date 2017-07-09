@@ -17,7 +17,6 @@ class GetJiraResponseService
   end
 
   def all_issues(project_id)
-
     project = Project.find(project_id).prefix
   	total = get_total_results(project)
   	issues = Array.new
@@ -37,7 +36,6 @@ class GetJiraResponseService
   end
 
   def project_components(project_id)
-  	
     project = Project.find(project_id).prefix
   	components = Array.new
   	response = JSON.parse(self.class.get("#{url}/project/#{project}/components", @options).to_s)
@@ -49,7 +47,6 @@ class GetJiraResponseService
   end
 
   def issue_history(issue)
-    p "ISSUE ID: #{issue}"
     response = JSON.parse(self.class.get("#{url}/issue/#{issue}?expand=changelog", @options).to_s)
     return response
   end
@@ -66,18 +63,17 @@ class GetJiraResponseService
 
   private 
 
-    def get_total_results(project)
-      response = JSON.parse(self.class.get("#{url}/search?jql=project=#{project}&ORDER+BY+KEY+ASC&fields=id,key&maxResults=1", @options).to_s)  
-      return response['total'].to_i
-    end
+  def get_total_results(project)
+    response = JSON.parse(self.class.get("#{url}/search?jql=project=#{project}&ORDER+BY+KEY+ASC&fields=id,key&maxResults=1", @options).to_s)  
+    return response['total'].to_i
+  end
 
-    def set_header
-      @options = {
-        headers: {
-          'Content-Type': content_type,
-          'Authorization': authorization  
-        } 
-      }
-    end
-
+  def set_header
+    @options = {
+      headers: {
+        'Content-Type': content_type,
+        'Authorization': authorization  
+      } 
+    }
+  end
 end

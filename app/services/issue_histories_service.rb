@@ -14,7 +14,8 @@ class IssueHistoriesService
     add_businesses_to_businesses_issues_table(history['fields']['customfield_11301']) unless history['fields']['customfield_11301'].nil?
     add_project_id_to_issue(Project.find_by_prefix(history['fields']['project']['key']).id)
     
-    # some cases when the card was assigned to a person and he moved the card, in the history there is the status change, but no assignee change
+    # some cases when the card was assigned to a person and he moved the card, in the history there is the status change, but no assignee change. 
+    # And it is not stored in the history
     @original_assignee = 0
     @original_assignee = Employee.where("key like ?","#{history['fields']['assignee']['key']}%").first.id if !history['fields']['assignee'].nil?
     
@@ -33,7 +34,8 @@ class IssueHistoriesService
       h['items'].each do |item|
         assignee_id = get_assignee_id_from_history_item(item, assignee_id)
         new_status_id = get_next_status_id(item)
-        add_issue_history(changelog_history_id, issue.id, new_status_id, h['created'], assignee_id) unless update_issue_done_state(h['created'], new_status_id)
+        ih = add_issue_history(changelog_history_id, issue.id, new_status_id, h['created'], assignee_id) 
+        add_done_issue_history(ih) if update_issue_done_state(h['created'], new_status_id)
       end
     end
   end
@@ -63,9 +65,7 @@ class IssueHistoriesService
     if !new_status_id.nil? && (Status.find(new_status_id).name == 'Done' || Status.find(new_status_id).name == 'Closed')
       ih = IssueHistory.order("changelog_id_tag DESC").find_by(issue_id: issue.id)
       if !ih.nil? && !issue.is_done
-        issue.is_done = true
         ih.end_date = start_at unless ih.end_date == start_at
-        issue.save
         ih.save
         return true
       end
@@ -119,7 +119,16 @@ class IssueHistoriesService
     ih.status_id = status_id
     ih.start_date = start_date
     ih.employee_id = employee_id unless employee_id == 0
-    ih.save!
+    ih.save
+    # return the object in case some other method wants to do something else with it
+    return ih
+  end
+
+  def add_done_issue_history(issue_history)
+    issue_history.end_date = issue_history.start_date
+    issue_history.duration = 0
+    Issue.find(issue_history.issue_id).update(is_done: true)
+    issue_history.save
   end
   
 end
