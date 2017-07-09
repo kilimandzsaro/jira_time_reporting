@@ -18,7 +18,7 @@
         <td><%= @employee.email %></td>
         <td><%= @employee.active %></td>
         <td>
-          <% @employee_issues.uniq.each do |ei| %>
+          <% @employee_issues.distinct.each do |ei| %>
             <%= ei %>
           <% end %>
         </td>

@@ -47,7 +47,6 @@ class GetJiraResponseService
   end
 
   def issue_history(issue)
-    p "ISSUE ID: #{issue}"
     response = JSON.parse(self.class.get("#{url}/issue/#{issue}?expand=changelog", @options).to_s)
     return response
   end

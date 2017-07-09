@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170627183733) do
+ActiveRecord::Schema.define(version: 20170703180059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,13 +89,13 @@ ActiveRecord::Schema.define(version: 20170627183733) do
   create_table "issue_histories", force: :cascade do |t|
     t.datetime "start_date"
     t.datetime "end_date"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "changelog_id_tag"
     t.integer  "issue_id"
     t.integer  "employee_id"
     t.integer  "status_id"
-    t.float    "duration"
+    t.float    "duration",         default: 0.0
     t.index ["employee_id"], name: "index_issue_histories_on_employee_id", using: :btree
     t.index ["issue_id"], name: "index_issue_histories_on_issue_id", using: :btree
     t.index ["status_id"], name: "index_issue_histories_on_status_id", using: :btree
