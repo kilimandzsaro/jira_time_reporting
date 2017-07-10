@@ -6,15 +6,14 @@
 	  	<%= devise_error_messages! %>
 	  </div>
 	  <div class="col-md-12">
-	  	<div>
+	  	<div class="field">
 		    <%= f.email_field :email, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), placeholder: "Password", :class => "form-control"  %> 
+			</div>
 		</div>
-
 		<div class="actions shared_links">
 		  	<%= f.submit "Resend confirmation instructions", class: "btn btn-large btn-primary" %>
 		</div>
-		  	<%= render "users/shared/links" %>
-	  </div>
+		<%= render "users/shared/links" %>
 	<% end %>
 </div>
 

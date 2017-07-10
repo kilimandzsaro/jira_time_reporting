@@ -1,0 +1,14 @@
+<div class="field" id="overtime">
+  <%= f.label :overtimes %>
+  <div class="input_group" %>
+    <%= f.collection_select :employee_id, Employee.all, :id, :display_name, class: 'form-control' %>
+    <%= f.label :start_date %>
+    <%= f.date_field :start_date, autocomplete: "off", placeholder: "YYYY-MM-DD", class: 'form-control' %>
+    <%= f.label :end_date %>
+    <%= f.date_field :end_date, autocomplete: "off", placeholder: "YYYY-MM-DD", class: 'form-control' %>
+    <%= f.label :overtime_sum_hours %>
+    <%= f.number_field :hours, class: 'form-control' %>
+    <%= f.hidden_field :report_id, value: @report.id %>
+    <%= button_to 'Add', overtimes_path, method: :post, class: 'btn btn-info btn-xs' %>
+  </div>
+</div>

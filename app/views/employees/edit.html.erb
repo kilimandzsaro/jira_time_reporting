@@ -3,7 +3,7 @@
   <center><h1>Edit employee</h1></center>
   <%= form_for @employee do |f| %>
     <%= render 'shared/error_messages' %>
-    <%= render 'employee/form', f: f %>
+    <%= render 'employees/form', f: f %>
     <%= f.submit "Save", class: "btn btn-large btn-primary" %>
   <% end %>
 </div>

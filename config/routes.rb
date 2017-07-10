@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  resources :show_results
+  resources :overtimes, :except => [:index, :edit, :show, :new]
+  resources :vacations, :except => [:index, :edit, :show, :new]
   resources :report_results, :except => [:edit, :show, :destroy]
   resources :global_settings do
     collection do
@@ -8,11 +11,11 @@ Rails.application.routes.draw do
   end
   resources :issues
   resources :issue_histories
-  resources :businesses, :except => [:show, :destroy, :create]
+  resources :businesses, :except => [:show, :destroy, :create, :new]
   resources :users
 
   resources :report_types
-  resources :components, :except => [:edit, :show, :update, :destroy] 
+  resources :components, :except => [:edit, :show, :update, :destroy, :new] 
   resources :projects, :except => [:show]
 
   resources :statuses, :except => [:show] do
@@ -27,7 +30,7 @@ Rails.application.routes.draw do
   end
   get 'reports/index'
 
-  resources :employees, :except => [:destroy] do
+  resources :employees, :except => [:destroy, :create, :new] do
     get :hide_and_show
     collection do
       get :refresh, to: "employees#refresh"

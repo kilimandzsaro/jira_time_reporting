@@ -1,21 +1,95 @@
-<div class="col-md-6 col-md-push-3">
-  <%= provide(:title, "Create new report") %>
-  <center><h1 >Create new report</h1></center>
-  <%= form_for(@report) do |f| %>
-    <div class="col-md-12">
-      <%= render 'shared/error_messages' %>
-    <div class="col-md-12">
-      <%= render 'form', f: f %>
+<div class="grid">
+  <div class="row">
+    <div class="col-md-6 col-md-push-3">
+      <%= provide(:title, "Create new report") %>
+      <center><h1 >Create new report</h1></center>
+      <%= form_for(@report) do |f| %>
+        <div class="col-md-12">
+          <%= render 'shared/error_messages' %>
+        <div class="col-md-12">
+          <%= render 'form', f: f %>
+        </div>
+        <div class="actions shared_links" id="submit">
+            <%= f.submit "Create", class: "btn btn-large btn-primary" %>
+          </div>
+          <div id="cancel">
+            <%= link_to 'Cancel', reports_path, class: "btn btn-large" %>
+          </div>
+        </div>
+      <% end %>
     </div>
+  </div>
 
-      <div class="actions shared_links" id="submit">
-        <%= f.submit "Create", class: "btn btn-large btn-primary" %>
-      </div>
-      <div id="cancel">
-        <%= link_to 'Cancel', reports_path, class: "btn btn-large" %>
+  <div class="raw">
+    <div class="col-md-6 col-md-push-3">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#vacations" data-toggle="tab">Vacations</a></li>
+        <li><a href="#overtimes" data-toggle="tab">Overtimes</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active" id="vacations">
+          <% if (Vacation.count > 0) && (Vacation.where(report_id: nil).count > 0) %>
+            <table>
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>From date</th>
+                  <th>To date</th>
+                  <th colspan="3"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% Vacation.where(report_id: @report.id).each do |v| %>
+                  <tr>
+                    <td><%= Employee.find(v.employee_id).display_name %></td>
+                    <td><%= v.start_date %></td>
+                    <td><%= v.end_date %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% end %>
+          <br>
+          <%= form_for(@vacation) do |f| %>
+            <%= render 'shared/error_messages' %>
+            <%= render 'reports/form_for_vacations', f: f %>
+            <%= f.submit "Save", class: "btn btn-large btn-primary" %>
+          <% end %>
+        </div>
+
+        <div class="tab-pane" id="overtimes">
+          <% if (Overtime.count > 0) && (Overtime.where(report_id: nil).count > 0) %>
+            <table>
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>From date</th>
+                  <th>To date</th>
+                  <th>Hours</th>
+                  <th colspan="3"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% Overtime.where(report_id: @report.id).each do |o| %>
+                  <tr>
+                    <td><%= Employee.find(o.employee_id).display_name %></td>
+                    <td><%= o.start_date %></td>
+                    <td><%= o.end_date %></td>
+                    <td><%= o.hours %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% end %>
+          <br>
+          <%= form_for(@overtime) do |f| %>
+            <%= render 'shared/error_messages' %>
+            <%= render 'reports/form_for_overtimes', f: f %>
+            <%= f.submit "Save", class: "btn btn-large btn-primary" %>
+          <% end %>
+        </div>
       </div>
     </div>
-  <% end %>  
+  </div>
 </div>
-
-

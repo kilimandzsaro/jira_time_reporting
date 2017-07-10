@@ -7,6 +7,8 @@
         <th>Name</th>
         <th>From</th>
         <th>To</th>
+        <th>Vacations</th>
+        <th>Overtimes</th>
         <th colspan="3"></th>
       </tr>
     </thead>
@@ -16,6 +18,16 @@
         <td><%= @report.name %></td>
         <td><%= @report.from_date %></td>
         <td><%= @report.to_date %></td>
+        <td>
+          <% Vacation.where(report_id: @report.id).each do |v| %>
+            <%= Employee.find(v.employee_id).display_name %><br>
+          <% end %>
+        </td>
+        <td>
+          <% Overtime.where(report_id: @report.id).each do |o| %>
+            <%= Employee.find(o.employee_id).display_name %><br>
+          <% end %>
+        </td>
         <td><%= button_to 'Get', report_get_report_path(@report), method: :get, class: 'btn btn-info btn-xs' %></td>
         <td><%= button_to 'Edit', edit_report_path(@report), method: :get, class: 'btn btn-info btn-xs' %></td>
           <td><% if !ReportResult.find_by_report_id(@report.id).nil? %>

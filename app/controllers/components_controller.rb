@@ -1,5 +1,5 @@
 class ComponentsController < ApplicationController
-  before_action :set_component, only: [:show, :destroy]
+  before_action :set_component, only: [:show]
   include HTTParty
 
   # GET /components
@@ -8,45 +8,15 @@ class ComponentsController < ApplicationController
     @components = Component.all
   end
 
-  # GET /components/get
-  def get
-    GetJiraResponseService.new
-    projects = Project.all
-    p.prefix.each do |project|
-      GetJiraResponseService.all_issues(project)
-    end
-  end
-
-  # GET /components/new
   def new
-    @component = Component.new
   end
 
   # POST /components
   # POST /components.json
   def create
     @component = Component.new(component_params)
-
-    respond_to do |format|
-      if @component.save
-        format.html { redirect_to @component, notice: 'Component was successfully created.' }
-        format.json { render :show, status: :created, location: @component }
-      else
-        format.html { render :new }
-        format.json { render json: @component.errors, status: :unprocessable_entity }
-      end
-    end
+    @component.save
   end
-
-  # # DELETE /components/1
-  # # DELETE /components/1.json
-  # def destroy
-  #   @component.destroy
-  #   respond_to do |format|
-  #     format.html { redirect_to components_url, notice: 'Component was successfully destroyed.' }
-  #     format.json { head :no_content }
-  #   end
-  # end
 
   private
     # Use callbacks to share common setup or constraints between actions.
