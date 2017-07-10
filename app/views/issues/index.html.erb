@@ -14,7 +14,7 @@
     <tbody>
       <% @issues.each do |issue| %>
         <tr>
-          <td><%= issue.issue_key %></td>
+          <td><%= link_to issue.issue_key, issue_path(issue) %></td>
           <td><%= issue.title %></td>
         </tr>
       <% end %>
