@@ -3,8 +3,8 @@ class ReportResultsService
   attr_accessor :from_date, :to_date, :employee_id, :report_id, :counted_statuses, :report_result_to_save, :vacations
 
   def initialize(from_date, to_date, employee_id, report_id)
-    self.from_date = from_date
-    self.to_date = to_date
+    self.from_date = Time.parse(from_date.to_s)
+    self.to_date = Time.parse(to_date.to_s)
     self.employee_id = employee_id
     self.report_id = report_id
     self.counted_statuses = Array.new
@@ -51,7 +51,6 @@ class ReportResultsService
                      .where("end_date BETWEEN ? AND ?", from_date, to_date)
                      .where("employee_id = ?", employee_id)
                      .where("status_id IN (?)", counted_statuses)
-
     find_what_to_save(issue_history, from_date, "")
   end
 
@@ -79,7 +78,7 @@ class ReportResultsService
     issue_history.each do |ih|
       from_date = ih.start_date if from_date == ""
       to_date = ih.end_date if to_date == ""
-      spent = calculate_duration(ih, from_date, to_date)
+      spent = calculate_spent_time(ih, from_date, to_date)
       report_result_to_save << [ih.employee_id, spent, ih.issue_id]
     end
   end
@@ -97,20 +96,18 @@ class ReportResultsService
     vacations.each { |vacation| BusinessTime::Config.holidays.delete(vacation) }
   end
 
-  def calculate_duration(ih, from_date, to_date)
+  def calculate_spent_time(ih, from_date, to_date)
     if ReportResult.find_by(issue_id: ih.issue_id, employee_id: employee_id, report_id: report_id).nil?
-      from_date = Time.parse(from_date.to_s)
-      to_date = Time.parse(to_date.to_s)
       if (to_date - from_date) < (4 * 60 * 60)
-        duration = to_date - from_date
-        return duration
+        spent = to_date - from_date
+        return spent
       end
       return from_date.business_time_until(to_date)
     end
   end
 
   def calculate_relative_time(report_result_item)
-    working_days = from_date.business_days_until(to_date) # Vacation days were added to BusinessTime
+    working_days = from_date.to_date.business_days_until(to_date.to_date) # Vacation days were added to BusinessTime
     sum = ReportResult.where(:employee_id => employee_id).where(:report_id => report_id).sum(:spent)
     overtime = 0
     Overtime.where(employee_id: report_result_item.employee_id).where("start_date BETWEEN ? AND ?", from_date, to_date).each do |o|

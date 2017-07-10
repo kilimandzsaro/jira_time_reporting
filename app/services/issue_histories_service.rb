@@ -24,6 +24,21 @@ class IssueHistoriesService
     issue.save
   end
 
+  def calculate_duration
+    duration = 0
+    
+    if history.end_date - history.start_date < (4 * 60 * 60) # if the difference is less than 4 hours
+      duration = history.end_date - history.start_date
+    else
+      duration = history.start_date.business_time_until(history.end_date)
+    end
+
+    if history.duration != duration
+      history.duration = duration
+      history.save!
+    end
+  end
+
   private
 
   def process_history(history)
