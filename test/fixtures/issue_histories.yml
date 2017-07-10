@@ -5,19 +5,19 @@ one:
   status: MyString
   start_date: 2017-05-18 21:05:46
   end_date: 2017-05-18 21:05:46
-  employee_id: 1
-  component_id: 1
-  business_id: 1
+  changelog_id_tag: 2
+  issue_id: 2
+  employee_id: 2
+  status_id: 2
   duration: 2017-05-18 21:05:46
-  project_id: 1
 
 two:
   issue_id: 2
   status: MyString2
   start_date: 2017-05-18 21:05:46
   end_date: 2017-05-18 21:05:46
+  changelog_id_tag: 2
+  issue_id: 2
   employee_id: 2
-  component_id: 2
-  business_id: 2
+  status_id: 2
   duration: 2017-05-18 21:05:46
-  project_id: 2

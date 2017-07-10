@@ -26,16 +26,7 @@ class IssueHistoriesController < ApplicationController
   # POST /issue_histories.json
   def create
     @issue_history = IssueHistory.new(issue_history_params)
-
-    respond_to do |format|
-      if @issue_history.save
-        format.html { redirect_to @issue_history, notice: 'Issue history was successfully created.' }
-        format.json { render :show, status: :created, location: @issue_history }
-      else
-        format.html { render :new }
-        format.json { render json: @issue_history.errors, status: :unprocessable_entity }
-      end
-    end
+    @issue_history.save
   end
 
   # PATCH/PUT /issue_histories/1

@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  resources :show_results
+  resources :overtimes, :except => [:index, :edit, :show, :new]
+  resources :vacations, :except => [:index, :edit, :show, :new]
   resources :report_results, :except => [:edit, :show, :destroy]
   resources :global_settings do
     collection do

@@ -8,10 +8,9 @@
     <%= csrf_meta_tags %>
   </head>
   <body class="<%= controller_name %> <%= action_name%>">
-    <%= render 'layouts/header' %>
+    <%= render "layouts/header" %>
     <div id="wrapper" class="toggled">
-        <%= render "layouts/sidebar" %>
-        <%= yield (:sidebar) %>
+      <%= render  partial:"layouts/sidebar" %>
     </div>
     <div id="page-content-wrapper">
       <div class="page-content">
