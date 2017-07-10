@@ -35,12 +35,19 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# database view handler
+gem 'scenic'
+
 gem 'httparty'
+
+# login
 gem 'devise'
 
+# paginate
 gem 'will_paginate', '~> 3.1.0'
 gem 'will_paginate-bootstrap'
 
+# calculations
 gem 'business_time'
 gem 'holidays', :git => 'https://github.com/holidays/holidays'
 
