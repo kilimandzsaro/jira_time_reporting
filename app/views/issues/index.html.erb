@@ -2,7 +2,7 @@
   <% provide(:title, "Issues")%>
   <center><h1>Issues</h1></center>
   <%= paginate @issues %>
-  <table>
+  <table class="table-sm">
     <thead>
       <tr>
         <th>Jira name</th>
@@ -14,7 +14,7 @@
     <tbody>
       <% @issues.each do |issue| %>
         <tr>
-          <td><%= link_to issue.issue_key, issue_path(issue) %></td>
+          <td width=100 ><%= link_to issue.issue_key, issue_path(issue) %></td>
           <td><%= issue.title %></td>
         </tr>
       <% end %>
