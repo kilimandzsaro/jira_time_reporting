@@ -16,8 +16,5 @@ require 'holidays'
 module JiraTimeReporting
   class Application < Rails::Application
     config.active_record.time_zone_aware_types = [:datetime, :time]
-    # Holidays.between(Date.civil(2017,1,1), 5.years.from_now, :ee, :observer).map do |holiday|
-    #   BusinessTime::Config.holidays << holiday[:date]
-    # end
   end
 end

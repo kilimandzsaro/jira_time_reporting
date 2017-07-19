@@ -8,6 +8,7 @@
         <th>Name</th>
         <th>Url</th>
         <th>Base64 code</th>
+        <th>Region</th>
         <th>Status</th>
         <th colspan="3"></th>
       </tr>
@@ -18,6 +19,7 @@
         <td><%= @global_setting.name %></td>
         <td><%= @global_setting.url %></td>
         <td><%= @global_setting.base64_key %></td>
+        <td><%= @global_setting.region %></td>
         <td>
           <% if @global_setting.active %>
             ACTIVE

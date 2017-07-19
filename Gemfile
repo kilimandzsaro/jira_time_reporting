@@ -38,6 +38,11 @@ gem 'jbuilder', '~> 2.5'
 # database view handler
 gem 'scenic'
 
+# for charts
+gem 'chartkick'
+gem 'groupdate'
+gem 'active_median'
+
 gem 'httparty'
 
 # login
@@ -48,7 +53,7 @@ gem 'kaminari'
 
 # calculations
 gem 'business_time'
-gem 'holidays', :git => 'https://github.com/holidays/holidays'
+gem 'holidays'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

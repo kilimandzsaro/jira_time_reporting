@@ -14,11 +14,13 @@ class GlobalSettingsController < ApplicationController
   # GET /global_settings/new
   def new
     @global_setting = GlobalSetting.new
+    @regions = Holidays.available_regions
   end
 
   # GET /global_settings/1/edit
   def edit
     @global_setting = GlobalSetting.find(params[:id])
+    @regions = Holidays.available_regions
   end
 
   # POST /global_settings
@@ -105,6 +107,6 @@ class GlobalSettingsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def global_setting_params
-      params.require(:global_setting).permit(:name, :url, :base64_key, :active)
+      params.require(:global_setting).permit(:name, :url, :base64_key, :active, :region)
     end
 end
