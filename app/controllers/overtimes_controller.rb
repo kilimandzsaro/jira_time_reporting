@@ -4,10 +4,8 @@ class OvertimesController < ApplicationController
   # POST /overtimes
   def create
     @overtime = Overtime.new(overtime_params)
-    respond_to do |format|
-      if @overtime.save
-        format.js {render inline: "location.reload();" }
-      end
+    if @overtime.save
+      redirect_back(fallback_location: edit_report_path(@overtime.report_id))
     end
   end
 

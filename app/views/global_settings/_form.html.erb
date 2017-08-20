@@ -12,20 +12,25 @@
 
 <div class="field">
   <%= f.label :name %>
-  <%= f.text_field :name, autofocus: true, :class=> "form-control"%>
+  <%= f.text_field :name, autofocus: true, :class => "form-control"%>
 </div>
 
 <div class="field">
   <%= f.label :jira_api_url %>
-  <%= f.text_field :url, autofocus: true, :class=> "form-control" %>
+  <%= f.text_field :url, autofocus: true, :class => "form-control" %>
 </div>
 
 <div class="field">
   <%= f.label :base64_key %>
-  <%= f.text_field :base64_key, autofocus: true, :class=> "form-control" %>
+  <%= f.text_field :base64_key, autofocus: true, :class => "form-control" %>
+</div>
+
+<div class="field">
+  <%= f.label :region %>
+  <%= f.select :region, @regions, :class => "form-control", autofocus: true %>
 </div>
 
 <div class="field">
   <%= f.label :active %>
-  <%= f.select :active, [['Active', 'true'], ['Inactive', 'false']], :class=> "form-control", autofocus: true %>
+  <%= f.select :active, [['Active', 'true'], ['Inactive', 'false']], :class => "form-control", autofocus: true %>
 </div>
