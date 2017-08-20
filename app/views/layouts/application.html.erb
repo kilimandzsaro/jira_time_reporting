@@ -3,15 +3,16 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><%= full_title(yield(:title)) %></title>
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag "http://www.google.com/jsapi", "chartkick", "data-turbolinks-track" => "reload" %>
+    <%= yield :charts_js %>
+    <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => "reload" %>
+    <%= javascript_include_tag "application", "data-turbolinks-track" => "reload" %>
     <%= csrf_meta_tags %>
   </head>
   <body class="<%= controller_name %> <%= action_name%>">
-    <%= render 'layouts/header' %>
+    <%= render "layouts/header" %>
     <div id="wrapper" class="toggled">
-        <%= render "layouts/sidebar" %>
-        <%= yield (:sidebar) %>
+      <%= render  partial:"layouts/sidebar" %>
     </div>
     <div id="page-content-wrapper">
       <div class="page-content">

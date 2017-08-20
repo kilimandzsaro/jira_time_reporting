@@ -1,9 +1,33 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  email: MyString
+  name: FirstAnt
+  email: first@ant.com
+  hide: true
+  key: firstant
+  display_name: First Ant
+  active: true
 
 two:
-  name: MyString2
-  email: MyString2
+  name: SecondAnt
+  email: second@ant.com
+  hide: false
+  key: secondant
+  display_name: Second Ant
+  active: true
+
+three:
+  name: ThirdAnt
+  email: third@ant.com
+  hide: false
+  key: thirdant
+  display_name: Third Ant
+  active: false
+
+four:
+  name: FourthAnt
+  email: fourth@ant.com
+  hide: true
+  key: fourthant
+  display_name: Fourth Ant
+  active: false

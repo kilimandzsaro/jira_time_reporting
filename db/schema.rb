@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611192342) do
+ActiveRecord::Schema.define(version: 20170719061957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,19 +83,20 @@ ActiveRecord::Schema.define(version: 20170611192342) do
     t.boolean  "active",     default: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.string   "region",     default: "ee"
     t.index ["name"], name: "index_global_settings_on_name", unique: true, using: :btree
   end
 
   create_table "issue_histories", force: :cascade do |t|
     t.datetime "start_date"
     t.datetime "end_date"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "changelog_id_tag"
     t.integer  "issue_id"
     t.integer  "employee_id"
     t.integer  "status_id"
-    t.float    "duration"
+    t.float    "duration",         default: 0.0
     t.index ["employee_id"], name: "index_issue_histories_on_employee_id", using: :btree
     t.index ["issue_id"], name: "index_issue_histories_on_issue_id", using: :btree
     t.index ["status_id"], name: "index_issue_histories_on_status_id", using: :btree
@@ -113,6 +114,18 @@ ActiveRecord::Schema.define(version: 20170611192342) do
     t.integer  "project_id"
     t.index ["jira_id_tag", "issue_key"], name: "index_issues_on_jira_id_tag_and_issue_key", unique: true, using: :btree
     t.index ["project_id"], name: "index_issues_on_project_id", using: :btree
+  end
+
+  create_table "overtimes", force: :cascade do |t|
+    t.date     "start_date"
+    t.date     "end_date"
+    t.float    "hours"
+    t.integer  "report_id"
+    t.integer  "employee_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["employee_id"], name: "index_overtimes_on_employee_id", using: :btree
+    t.index ["report_id"], name: "index_overtimes_on_report_id", using: :btree
   end
 
   create_table "projects", force: :cascade do |t|
@@ -158,6 +171,13 @@ ActiveRecord::Schema.define(version: 20170611192342) do
     t.index ["report_type_id"], name: "index_reports_on_report_type_id", using: :btree
   end
 
+  create_table "show_results", force: :cascade do |t|
+    t.string   "name"
+    t.string   "template"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "statuses", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at",                 null: false
@@ -196,6 +216,17 @@ ActiveRecord::Schema.define(version: 20170611192342) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  create_table "vacations", force: :cascade do |t|
+    t.date     "start_date"
+    t.date     "end_date"
+    t.integer  "report_id"
+    t.integer  "employee_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["employee_id"], name: "index_vacations_on_employee_id", using: :btree
+    t.index ["report_id"], name: "index_vacations_on_report_id", using: :btree
+  end
+
   add_foreign_key "businesses_issues", "businesses"
   add_foreign_key "businesses_issues", "issues"
   add_foreign_key "businesses_report_types", "businesses"
@@ -210,6 +241,8 @@ ActiveRecord::Schema.define(version: 20170611192342) do
   add_foreign_key "issue_histories", "issues"
   add_foreign_key "issue_histories", "statuses"
   add_foreign_key "issues", "projects"
+  add_foreign_key "overtimes", "employees"
+  add_foreign_key "overtimes", "reports"
   add_foreign_key "projects_report_types", "projects"
   add_foreign_key "projects_report_types", "report_types"
   add_foreign_key "report_results", "employees"
@@ -218,4 +251,6 @@ ActiveRecord::Schema.define(version: 20170611192342) do
   add_foreign_key "reports", "report_types"
   add_foreign_key "statuses_report_types", "report_types"
   add_foreign_key "statuses_report_types", "statuses"
+  add_foreign_key "vacations", "employees"
+  add_foreign_key "vacations", "reports"
 end

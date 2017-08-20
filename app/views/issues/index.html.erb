@@ -1,8 +1,8 @@
 <div class="col-md-7 col-md-offset-3 main">
   <% provide(:title, "Issues")%>
   <center><h1>Issues</h1></center>
-  <%= will_paginate @issues, renderer: BootstrapPagination::Rails %>
-  <table>
+  <%= paginate @issues %>
+  <table class="table-sm">
     <thead>
       <tr>
         <th>Jira name</th>
@@ -14,11 +14,11 @@
     <tbody>
       <% @issues.each do |issue| %>
         <tr>
-          <td><%= issue.issue_key %></td>
+          <td width=100 ><%= link_to issue.issue_key, issue_path(issue) %></td>
           <td><%= issue.title %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
-  <%= will_paginate @issues, renderer: BootstrapPagination::Rails%>
+  <%= paginate @issues %>
 </div>

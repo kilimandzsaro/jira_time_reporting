@@ -14,11 +14,13 @@ class GlobalSettingsController < ApplicationController
   # GET /global_settings/new
   def new
     @global_setting = GlobalSetting.new
+    @regions = Holidays.available_regions
   end
 
   # GET /global_settings/1/edit
   def edit
     @global_setting = GlobalSetting.find(params[:id])
+    @regions = Holidays.available_regions
   end
 
   # POST /global_settings
@@ -40,7 +42,11 @@ class GlobalSettingsController < ApplicationController
     get_all_issue_histories(connect_to_jira)
 
     set_end_dates
-    calculate_duration
+    
+    IssueHistory.all.each do |ih|
+      ihs = IssueHistoriesService.new(ih)
+      ihs.calculate_duration
+    end
 
     redirect_to global_settings_path
   end
@@ -93,22 +99,7 @@ class GlobalSettingsController < ApplicationController
         end
       end
     end
-    def calculate_duration
-      IssueHistory.where("end_date IS NOT NULL").each do |ih|
-        duration = 0
-        
-        if ih.end_date - ih.start_date < (4 * 60 * 60) # if the difference is less than 4 hours
-          duration = ih.end_date - ih.start_date
-        else
-          duration = ih.start_date.business_time_until(ih.end_date)
-        end
-
-        if ih.duration != duration
-          ih.duration = duration
-          ih.save!
-        end
-      end
-    end
+    
     # Use callbacks to share common setup or constraints between actions.
     def set_global_setting
       @global_setting = GlobalSetting.find(params[:id])
@@ -116,6 +107,6 @@ class GlobalSettingsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def global_setting_params
-      params.require(:global_setting).permit(:name, :url, :base64_key, :active)
+      params.require(:global_setting).permit(:name, :url, :base64_key, :active, :region)
     end
 end

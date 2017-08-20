@@ -4,13 +4,14 @@ class IssuesController < ApplicationController
   # GET /issues
   # GET /issues.json
   def index
-    @issues = Issue.paginate(page: params[:page], per_page: 50)
+    @issues = Issue.order(:issue_key).page(params[:page])
   end
 
   # GET /issues/1
   # GET /issues/1.json
   def show
     @issue = Issue.find(params[:id])
+    @issue_histories = IssueHistory.where(issue_id: params[:id])
   end
 
   # GET /issues/new
@@ -26,40 +27,19 @@ class IssuesController < ApplicationController
   # POST /issues.json
   def create
     @issue = Issue.new(issue_params)
-
-    respond_to do |format|
-      if @issue.save
-        format.html { redirect_to @issue, notice: 'Issue was successfully created.' }
-        format.json { render :show, status: :created, location: @issue }
-      else
-        format.html { render :new }
-        format.json { render json: @issue.errors, status: :unprocessable_entity }
-      end
-    end
+    @issue.save
   end
 
   # PATCH/PUT /issues/1
   # PATCH/PUT /issues/1.json
   def update
-    respond_to do |format|
-      if @issue.update(issue_params)
-        format.html { redirect_to @issue, notice: 'Issue was successfully updated.' }
-        format.json { render :show, status: :ok, location: @issue }
-      else
-        format.html { render :edit }
-        format.json { render json: @issue.errors, status: :unprocessable_entity }
-      end
-    end
+    @issue.update(issue_params)
   end
 
   # DELETE /issues/1
   # DELETE /issues/1.json
   def destroy
     @issue.destroy
-    respond_to do |format|
-      format.html { redirect_to issues_url, notice: 'Issue was successfully destroyed.' }
-      format.json { head :no_content }
-    end
   end
 
   private

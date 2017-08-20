@@ -11,11 +11,9 @@ class EmployeesController < ApplicationController
   # GET /employees/1
   # GET /employees/1.json
   def show
-    Employee.find(params[:id]).issue_history_id.each do |ihid| 
-      employee_issues_id.push(IssueHistory.find(ihid).pluck(:issue_id))
-    end
-    employee_issues_id.each do |eiid|
-      @employees_issues.push(Issue.find(eiid))
+    @employee_issues = Array.new
+    IssueHistory.where("employee_id = ?", @employee.id).each do |ih| 
+      @employee_issues.push(Issue.find(IssueHistory.find(ih.id).issue_id).issue_key)
     end
   end
 
@@ -26,7 +24,6 @@ class EmployeesController < ApplicationController
   # PATCH/PUT /employees/1 change the status of the employee
   def hide_and_show
     @employee = Employee.find(params[:employee_id])
-
     @employee.hide = !@employee.hide
 
     respond_to do |format|
@@ -42,27 +39,10 @@ class EmployeesController < ApplicationController
     end
   end
 
-  # POST /employees
-  # POST /employees.json
-  def create
-    @employee = Employee.new(employee_params)
-
-    respond_to do |format|
-      if @employee.save
-        format.html { redirect_to @employee, notice: 'Employee was successfully created.' }
-        format.json { render :show, status: :created, location: @employee }
-      else
-        format.html { render :new }
-        format.json { render json: @employee.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   # PATCH/PUT /employees/1
   # PATCH/PUT /employees/1.json
   def update
     respond_to do |format|
-      @employee = Employee.find(params[:employee_id])
       if @employee.update(employee_params)
         format.html { redirect_to @employee, notice: 'Employee was successfully updated.' }
         format.json { render :show, status: :ok, location: @employee }
@@ -96,6 +76,6 @@ class EmployeesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def employee_params
-      params.require(:employee).permit(:id, :name, :email, {issue_history: [:id]}, :hide)
+      params.require(:employee).permit(:name, :email, :hide, :key, :display_name, :active)
     end
 end

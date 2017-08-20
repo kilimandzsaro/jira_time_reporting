@@ -1,18 +1,18 @@
 <div id="sidebar-wrapper">
   <ul class="sidebar-nav">
-    <li class="sidebar-brand" id="sidebar_reports"> <%= link_to "Report", reports_path %></li>
+    <li class="sidebar-brand" id="sidebar_reports"> <%= link_to "Reports", reports_path %></li>
     <br>
     <li id="sidebar_report_types"> <%= link_to "Report Types", report_types_path %></li>
     <br>
     <% if current_user != nil %>
       <li id="sidebar_issues"> <%= link_to "Issues", issues_path %></li>
-      <li id="sidebar_issue_histories"> <%= link_to "Issue Histories", issue_histories_path %></li>
       <br>
       <li id="sidebar_statuses"> <%= link_to "Statuses", statuses_path %></li>
       <li id="sidebar_businesses"> <%= link_to "Business", businesses_path %></li>
       <li id="sidebar_components"> <%= link_to "Components", components_path %></li>
       <li id="sidebar_employees"> <%= link_to "Employees", employees_path %></li>
       <li id="sidebar_projects"> <%= link_to "Projects", projects_path %></li>
+      <li id="sidebar_result_views"> <%= link_to "View Templates", show_results_path %></li>
     <% end %>
   </ul>
 </div>
