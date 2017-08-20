@@ -40,8 +40,8 @@ gem 'scenic'
 
 # for charts
 gem 'chartkick'
-gem 'groupdate'
-gem 'active_median'
+# gem 'groupdate'
+# gem 'active_median'
 
 gem 'httparty'
 

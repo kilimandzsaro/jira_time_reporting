@@ -1,11 +1,6 @@
 business_time:
   beginning_of_workday: 7:00 am
   end_of_workday: 7:30 pm
-  holidays:
-    - Jan 01, 2017
-    - June 23, 2017
-    - July 4th, 2017
-    - December 25th, 2017
   work_week:
     - mon
     - tue
