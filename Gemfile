@@ -9,6 +9,7 @@ gem 'rails', '~> 5.0.3'
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'pg', '~> 0.18'
 gem 'puma', '~> 3.0'
+gem 'mina'
 # Use SCSS for stylesheets
 gem 'bootstrap-sass'
 gem 'sass-rails', '~> 5.0'
