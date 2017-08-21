@@ -1,6 +1,6 @@
 class CreateIssueHistories < ActiveRecord::Migration[5.0]
   def change
-    drop_table :issue_histories
+    # drop_table :issue_histories
     
     create_table :issue_histories do |t|
       t.integer :issue_id
