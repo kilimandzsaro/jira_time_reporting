@@ -1,4 +1,5 @@
 class ReportResultsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_report_result, only: [:update]
 
   # GET /report_results
@@ -31,13 +32,14 @@ class ReportResultsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_report_result
-      @report_result = ReportResult.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_report_result
+    @report_result = ReportResult.find(params[:id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def report_result_params
-      params.fetch(:report_result, {})
-    end
+  # Only allow a trusted parameter "white list" through.
+  def report_result_params
+    params.fetch(:report_result, {})
+  end
+
 end

@@ -1,4 +1,5 @@
 class ReportTypesController < ApplicationController
+  before_action :authenticate_user!
   # before_action :set_report_type, only: [:edit]
 
   # GET /report_types
@@ -79,14 +80,14 @@ class ReportTypesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_report_type
-      @report_type = ReportType.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_report_type
+    @report_type = ReportType.find(params[:id])
+  end
 
-    def update_report_type_params
-      params.require(:report_type).permit(:name, :employee_ids => [], :component_ids => [], :business_ids => [], :project_ids => [], :status_ids => [])
-      # params.require(:report_type).permit!
-    end
+  def update_report_type_params
+    params.require(:report_type).permit(:name, :employee_ids => [], :component_ids => [], :business_ids => [], :project_ids => [], :status_ids => [])
+    # params.require(:report_type).permit!
+  end
 
 end

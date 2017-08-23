@@ -1,4 +1,5 @@
 class OvertimesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_overtime, only: [:update, :destroy]
 
   # POST /overtimes
@@ -20,13 +21,14 @@ class OvertimesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_overtime
-      @overtime = Overtime.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_overtime
+    @overtime = Overtime.find(params[:id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def overtime_params
-      params.require(:overtime).permit(:start_date, :end_date, :employee_id, :report_id, :hours)
-    end
+  # Only allow a trusted parameter "white list" through.
+  def overtime_params
+    params.require(:overtime).permit(:start_date, :end_date, :employee_id, :report_id, :hours)
+  end
+
 end

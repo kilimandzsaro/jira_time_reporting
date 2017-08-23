@@ -49,6 +49,7 @@ gem 'httparty'
 
 # login
 gem 'devise'
+gem 'omniauth-jira'
 
 # pagination
 gem 'kaminari'

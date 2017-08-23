@@ -19,6 +19,7 @@
         <div class="container-fluid">
           <% flash.each do |key, value| %>
             <div class="alert alert-<%= key %> col-md-8 col-md-offset-2 main"><%= value %></div>
+            <div class="notice notice-<%= key %> col-md-8 col-md-offset-2 main"><%= value %></div>
           <% end %>
           <div class="row">
             <div class="col-md-12">

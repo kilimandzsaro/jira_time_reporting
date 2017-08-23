@@ -1,4 +1,5 @@
 class VacationsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_vacation, only: [:update, :destroy]
 
   # POST /vacations
@@ -20,13 +21,14 @@ class VacationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_vacation
-      @vacation = Vacation.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_vacation
+    @vacation = Vacation.find(params[:id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def vacation_params
-      params.require(:vacation).permit(:start_date, :end_date, :employee_id, :report_id)
-    end
+  # Only allow a trusted parameter "white list" through.
+  def vacation_params
+    params.require(:vacation).permit(:start_date, :end_date, :employee_id, :report_id)
+  end
+
 end

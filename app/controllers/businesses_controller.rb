@@ -1,4 +1,5 @@
 class BusinessesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_business, only: [:edit, :update]
 
   # GET /businesses
@@ -33,12 +34,12 @@ class BusinessesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_business
-      @business = Business.find(params[:id])
-    end
+  def set_business
+    @business = Business.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def business_params
-      params.require(:business).permit(:name, :price)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def business_params
+    params.require(:business).permit(:name, :price)
+  end
 end
