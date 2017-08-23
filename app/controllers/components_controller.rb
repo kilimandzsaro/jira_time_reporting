@@ -1,4 +1,5 @@
 class ComponentsController < ApplicationController
+  before_action :signed_in_user, only: [:show]
   before_action :set_component, only: [:show]
   include HTTParty
 
@@ -19,14 +20,21 @@ class ComponentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_component
-      @component = Component.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_component
+    @component = Component.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def component_params
-      params.require(:component).permit(:name)
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def component_params
+    params.require(:component).permit(:name)
+  end
+
+  def signed_in_user
+    unless signed_in?
+      store_location
+      redirect_to signin_url, flash: {warning: "Please sign in."}
     end
+  end
 
 end

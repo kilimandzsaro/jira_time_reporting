@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :signed_in_user
   def edit
     @user = current_user
   end
@@ -17,7 +18,14 @@ class UsersController < ApplicationController
   end
 
   private
-    def update_person_params
-      params.require(:user).permit(user: [:email, :username])
+  def update_person_params
+    params.require(:user).permit(user: [:email, :username])
+  end
+
+  def signed_in_user
+    unless signed_in?
+      store_location
+      redirect_to signin_url, flash: {warning: "Please sign in."}
     end
+  end
 end

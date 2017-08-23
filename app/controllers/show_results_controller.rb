@@ -1,4 +1,5 @@
 class ShowResultsController < ApplicationController
+  before_action :signed_in_user
   before_action :set_show_result, only: [:show, :edit, :update, :destroy]
 
   # GET /show_results
@@ -46,13 +47,20 @@ class ShowResultsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_show_result
-      @show_result = ShowResult.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_show_result
+    @show_result = ShowResult.find(params[:id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def show_result_params
-      params.require(:show_result).permit(:name, :template)
+  # Only allow a trusted parameter "white list" through.
+  def show_result_params
+    params.require(:show_result).permit(:name, :template)
+  end
+
+  def signed_in_user
+    unless signed_in?
+      store_location
+      redirect_to signin_url, flash: {warning: "Please sign in."}
     end
+  end
 end

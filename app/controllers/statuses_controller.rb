@@ -1,4 +1,5 @@
 class StatusesController < ApplicationController
+  before_action :signed_in_user
   # before_action :set_status, only: [:refresh, :destroy]
 
   # GET /statuses
@@ -53,12 +54,19 @@ class StatusesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_status
-      @status = Status.find(params[:id])
-    end
+  def set_status
+    @status = Status.find(params[:id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def status_params
-      params.require(:status).permit(:counted)
+  # Only allow a trusted parameter "white list" through.
+  def status_params
+    params.require(:status).permit(:counted)
+  end
+
+  def signed_in_user
+    unless signed_in?
+      store_location
+      redirect_to signin_url, flash: {warning: "Please sign in."}
     end
+  end
 end
