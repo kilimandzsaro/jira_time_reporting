@@ -1,5 +1,5 @@
 class OvertimesController < ApplicationController
-  before_action :signed_in_user
+  before_action :authenticate_user!
   before_action :set_overtime, only: [:update, :destroy]
 
   # POST /overtimes
@@ -31,10 +31,4 @@ class OvertimesController < ApplicationController
     params.require(:overtime).permit(:start_date, :end_date, :employee_id, :report_id, :hours)
   end
 
-  def signed_in_user
-    unless signed_in?
-      store_location
-      redirect_to signin_url, flash: {warning: "Please sign in."}
-    end
-  end
 end

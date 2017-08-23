@@ -1,5 +1,5 @@
 class GlobalSettingsController < ApplicationController
-  before_action :signed_in_user, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
   before_action :set_global_setting, only: [:show, :edit, :update, :destroy]
 
   # GET /global_settings
@@ -111,10 +111,4 @@ class GlobalSettingsController < ApplicationController
     params.require(:global_setting).permit(:name, :url, :base64_key, :active, :region)
   end
 
-  def signed_in_user
-    unless signed_in?
-      store_location
-      redirect_to signin_url, flash: {warning: "Please sign in."}
-    end
-  end
 end

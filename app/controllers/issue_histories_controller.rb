@@ -1,5 +1,5 @@
 class IssueHistoriesController < ApplicationController
-  before_action :signed_in_user
+  before_action :authenticate_user!
   before_action :set_issue_history, only: [:show, :edit, :update, :destroy]
 
   # GET /issue_histories
@@ -55,10 +55,4 @@ class IssueHistoriesController < ApplicationController
     params.fetch(:issue_history, {})
   end
 
-  def signed_in_user
-    unless signed_in?
-      store_location
-      redirect_to signin_url, flash: {warning: "Please sign in."}
-    end
-  end
 end

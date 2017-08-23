@@ -1,5 +1,5 @@
 class VacationsController < ApplicationController
-  before_action :signed_in_user
+  before_action :authenticate_user!
   before_action :set_vacation, only: [:update, :destroy]
 
   # POST /vacations
@@ -31,10 +31,4 @@ class VacationsController < ApplicationController
     params.require(:vacation).permit(:start_date, :end_date, :employee_id, :report_id)
   end
 
-  def signed_in_user
-    unless signed_in?
-      store_location
-      redirect_to signin_url, flash: {warning: "Please sign in."}
-    end
-  end
 end

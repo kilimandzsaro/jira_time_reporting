@@ -1,5 +1,5 @@
 class IssuesController < ApplicationController
-  before_action :signed_in_user
+  before_action :authenticate_user!
   before_action :set_issue, only: [:show, :edit, :update, :destroy]
 
   # GET /issues
@@ -52,13 +52,6 @@ class IssuesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def issue_params
     params.fetch(:issue, {})
-  end
-
-  def signed_in_user
-    unless signed_in?
-      store_location
-      redirect_to signin_url, flash: {warning: "Please sign in."}
-    end
   end
 
 end

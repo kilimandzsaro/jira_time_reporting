@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   resources :issues
   resources :issue_histories
   resources :businesses, :except => [:show, :destroy, :create, :new]
-  resources :users
 
   resources :report_types
   resources :components, :except => [:edit, :show, :update, :destroy, :new] 
@@ -37,18 +36,22 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :user, :controllers => {
-    :registrations => "user/registrations",
-    :sessions => "user/sessions",
-    :passwords => "user/passwords",
-    :confirmations => "user/confirmations"
-  }
-    
+  devise_for :users, :controllers => {
+    :registrations => "users/registrations",
+    :sessions => "users/sessions",
+    :passwords => "users/passwords",
+    :confirmations => "users/confirmations",
+    :unlocks => "users/unlocks",
+    :omniauth => "users/omniauth"
+  } 
+
   devise_scope :user do
-    get 'signup', to: "user/registrations#new"
-    get 'signin', to: "user/sessions#new"
-    delete 'signout', to: "user/sessions#destroy"
+    # get 'signup', to: "users/registrations#new"
+    # get 'signin', to: "users/sessions#new"
+    get 'users/sign_out', to: "users/sessions#destroy"
   end
-  
+
+  resources :users
+    
   root 'reports#index'
 end

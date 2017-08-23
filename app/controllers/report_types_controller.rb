@@ -1,5 +1,5 @@
 class ReportTypesController < ApplicationController
-  before_action :signed_in_user
+  before_action :authenticate_user!
   # before_action :set_report_type, only: [:edit]
 
   # GET /report_types
@@ -88,13 +88,6 @@ class ReportTypesController < ApplicationController
   def update_report_type_params
     params.require(:report_type).permit(:name, :employee_ids => [], :component_ids => [], :business_ids => [], :project_ids => [], :status_ids => [])
     # params.require(:report_type).permit!
-  end
-
-  def signed_in_user
-    unless signed_in?
-      store_location
-      redirect_to signin_url, flash: {warning: "Please sign in."}
-    end
   end
 
 end

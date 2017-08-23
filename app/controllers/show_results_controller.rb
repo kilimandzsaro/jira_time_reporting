@@ -1,5 +1,5 @@
 class ShowResultsController < ApplicationController
-  before_action :signed_in_user
+  before_action :authenticate_user!
   before_action :set_show_result, only: [:show, :edit, :update, :destroy]
 
   # GET /show_results
@@ -57,10 +57,4 @@ class ShowResultsController < ApplicationController
     params.require(:show_result).permit(:name, :template)
   end
 
-  def signed_in_user
-    unless signed_in?
-      store_location
-      redirect_to signin_url, flash: {warning: "Please sign in."}
-    end
-  end
 end
