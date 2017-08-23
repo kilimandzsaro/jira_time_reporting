@@ -1,4 +1,5 @@
 class IssuesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_issue, only: [:show, :edit, :update, :destroy]
 
   # GET /issues
@@ -43,14 +44,14 @@ class IssuesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_issue
-      @issue = Issue.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_issue
+    @issue = Issue.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def issue_params
-      params.fetch(:issue, {})
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def issue_params
+    params.fetch(:issue, {})
+  end
 
 end
