@@ -21,6 +21,5 @@
       </table>
     <% end %>
   <% end %>
-  <%= pie_chart @issue_histories.group(:issue_id, :duration).sum(:duration) %>
   <%= link_to 'Back', issues_path %>
 </div>
