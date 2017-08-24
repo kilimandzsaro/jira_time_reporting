@@ -16,5 +16,6 @@
 </div>
 
 <div class="field" id="should_it_count_as_working_time">
-  <%= f.collection_select :key, {1 => 'true', 2 => 'false'}, :key, :value, :class=> "form-control" %>
+  <%= f.label :counted %>
+  <%= f.select :counted, [['Counted', 'true'], ['Do not care', 'false']], :class => "form-control", autofocus: true %>
 </div>
