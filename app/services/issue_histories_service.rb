@@ -17,6 +17,10 @@ class IssueHistoriesService
     # some cases when the card was assigned to a person and he moved the card, in the history there is the status change, but no assignee change. 
     # And it is not stored in the history
     @original_assignee = 0
+    if !history['fields']['assignee'].nil? && Employee.where("key like ?","#{history['fields']['assignee']['key']}%").empty? 
+      emp = EmployeesService.new
+      emp.add_inactive_employee_from_issue(history['fields']['assignee']['key'], history['fields']['assignee']['name'])
+    end
     @original_assignee = Employee.where("key like ?","#{history['fields']['assignee']['key']}%").first.id if !history['fields']['assignee'].nil?
     
     process_history(history['changelog']['histories'])

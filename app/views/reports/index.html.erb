@@ -12,19 +12,21 @@
     </thead>
 
     <tbody>
-      <% @reports.each do |report| %>
-        <tr>
-          <td><%= report.name %></td>
-          <td><%= report.from_date %></td>
-          <td><%= report.to_date %></td>
-          <td><%= ReportType.find(report.report_type_id).name %></td>
-          <td><%= button_to 'Show', report, method: :get, class: 'btn btn-info btn-xs' %></td>
-          <td><%= button_to 'Edit', edit_report_path(report), method: :get, class: 'btn btn-info btn-xs' %></td>
-          <td><% if !ReportResult.find_by_report_id(report.id).nil? %>
-            <%= button_to 'Resuls', report_get_results_path(report), method: :get, class: 'btn btn-info btn-xs' %>
-          <% end %></td>
-          <td><%= link_to 'Destroy', report, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        </tr>
+      <% if current_user != nil %>
+        <% @reports.each do |report| %>
+          <tr>
+            <td><%= report.name %></td>
+            <td><%= report.from_date %></td>
+            <td><%= report.to_date %></td>
+            <td><%= ReportType.find(report.report_type_id).name %></td>
+            <td><%= button_to 'Show', report, method: :get, class: 'btn btn-info btn-xs' %></td>
+            <td><%= button_to 'Edit', edit_report_path(report), method: :get, class: 'btn btn-info btn-xs' %></td>
+            <td><% if !ReportResult.find_by_report_id(report.id).nil? %>
+              <%= button_to 'Resuls', report_get_results_path(report), method: :get, class: 'btn btn-info btn-xs' %>
+            <% end %></td>
+            <td><%= link_to 'Destroy', report, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
       <% end %>
     </tbody>
   </table>

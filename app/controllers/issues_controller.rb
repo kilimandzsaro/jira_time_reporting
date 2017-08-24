@@ -12,7 +12,7 @@ class IssuesController < ApplicationController
   # GET /issues/1.json
   def show
     @issue = Issue.find(params[:id])
-    @issue_histories = IssueHistory.where(issue_id: params[:id])
+    @issue_histories = IssueHistory.where(issue_id: @issue.id)
   end
 
   # GET /issues/new
