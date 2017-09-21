@@ -45,6 +45,14 @@ class ReportsController < ApplicationController
     # @businesses = FullReportResultsView.select([:business]).where(report_id: @report.id).group(:business).order(:business)
     # @projects = FullReportResultsView.select([:project]).where(report_id: @report.id).group(:project).order(:project)
     @templates = ShowResult.all
+    respond_to do |format|
+        format.html
+        format.pdf do
+            render pdf: "report_#{Time.now.to_i}",
+                template: "reports_controller/get_results.html.erb",
+                layout: 'pdf.html'
+        end
+    end
   end
 
   # GET /reports/1/edit

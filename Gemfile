@@ -54,6 +54,10 @@ gem 'omniauth-jira'
 # pagination
 gem 'kaminari'
 
+# printing
+gem 'wicked_pdf', github: 'mileszs/wicked_pdf'
+gem 'wkhtmltopdf-binary'
+
 # calculations
 gem 'business_time'
 gem 'holidays'

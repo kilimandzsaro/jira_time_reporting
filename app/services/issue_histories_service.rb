@@ -4,26 +4,23 @@ class IssueHistoriesService
 
   def initialize(history)
     self.history = history
+    self.issue = Issue.find_by(issue_key: history['key'])
   end
 
   def process_issue_history
-    self.issue = Issue.find_by(issue_key: history['key'])
-    issue.title = history['fields']['summary']
-    issue.issue_type = history['fields']['issuetype']['name']
-    add_components_to_components_issues_table(history['fields']['components'])
-    add_businesses_to_businesses_issues_table(history['fields']['customfield_11301']) unless history['fields']['customfield_11301'].nil?
-    add_project_id_to_issue(Project.find_by_prefix(history['fields']['project']['key']).id)
+    
+    add_issue_history_to_the_issue
+    add_title_to_issue
+    # add_issue_type_to_issue
+    # add_components_to_components_issues_table
+    # add_businesses_to_businesses_issues_table unless history['fields']['customfield_11301'].nil?
+    # add_project_id_to_issue
     
     # some cases when the card was assigned to a person and he moved the card, in the history there is the status change, but no assignee change. 
     # And it is not stored in the history
-    @original_assignee = 0
-    if !history['fields']['assignee'].nil? && Employee.where("key like ?","#{history['fields']['assignee']['key']}%").empty? 
-      emp = EmployeesService.new
-      emp.add_inactive_employee_from_issue(history['fields']['assignee']['key'], history['fields']['assignee']['name'])
-    end
-    @original_assignee = Employee.where("key like ?","#{history['fields']['assignee']['key']}%").first.id if !history['fields']['assignee'].nil?
-    
-    process_history(history['changelog']['histories'])
+    add_assignee_to_the_issue
+
+    process_history
 
     issue.save
   end
@@ -47,11 +44,11 @@ class IssueHistoriesService
 
   private
 
-  def process_history(history)
+  def process_history
     assignee_id = @original_assignee
-    history.sort_by {|e| e[:id]}
-    history.each do |h|
-      changelog_history_id = h['id']
+    history["changelog"]["histories"].sort_by {|e| e["id"]}
+    history["changelog"]["histories"].each do |h|
+      changelog_history_id = h["id"].to_i
       h['items'].each do |item|
         assignee_id = get_assignee_id_from_history_item(item, assignee_id)
         new_status_id = get_next_status_id(item)
@@ -97,8 +94,8 @@ class IssueHistoriesService
     return false
   end
 
-  def add_components_to_components_issues_table(components)
-    components.each do |c|
+  def add_components_to_components_issues_table
+    history['fields']['components'].each do |c|
       if ComponentsIssue.find_by(component_id: Component.find_by_name(c['name']).id, issue_id: issue.id).nil?
         ci = ComponentsIssue.new
         ci.component_id = Component.find_by_name(c['name']).id
@@ -108,8 +105,8 @@ class IssueHistoriesService
     end
   end
 
-  def add_businesses_to_businesses_issues_table(businesses)
-    businesses.each do |b|
+  def add_businesses_to_businesses_issues_table
+    history['fields']['customfield_11301'].each do |b|
       # For custom fields there is no other chance to get the variations, so we have to add a new ones on the fly
       if Business.find_by_jira_name(b).nil?
         new_business = Business.new
@@ -129,7 +126,8 @@ class IssueHistoriesService
     
   end
 
-  def add_project_id_to_issue(project_id)
+  def add_project_id_to_issue
+    project_id = Project.find_by_prefix(history['fields']['project']['key']).id
     issue.project_id = project_id unless issue.project_id == project_id
   end
 
@@ -151,5 +149,29 @@ class IssueHistoriesService
     Issue.find(issue_history.issue_id).update(is_done: true)
     issue_history.save
   end
-  
+
+  def add_issue_history_to_the_issue
+    if issue.issue_history != history
+      issue.issue_history = history
+    end
+  end
+
+  def add_title_to_issue
+    if !history['fields']['summary'].nil?
+      issue.title = history['fields']['summary']
+    end
+  end
+
+  def add_issue_type_to_issue
+    issue.issue_type = history['fields']['issuetype']['name']
+  end
+
+  def add_assignee_to_the_issue
+    @original_assignee = 0
+    if !history['fields']['assignee'].nil? && Employee.where("key like ?","#{history['fields']['assignee']['key']}%").empty? 
+      emp = EmployeesService.new
+      emp.add_inactive_employee_from_issue(history['fields']['assignee']['key'], history['fields']['assignee']['name'])
+    end
+    @original_assignee = Employee.where("key like ?","#{history['fields']['assignee']['key']}%").first.id if !history['fields']['assignee'].nil?
+  end
 end

@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/mileszs/wicked_pdf.git
+  revision: 2278a6d8d09f255eddf95b6571ff76cab433748a
+  specs:
+    wicked_pdf (1.1.0)
+      activesupport
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -286,6 +293,7 @@ GEM
     websocket-driver (0.6.5-java)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
+    wkhtmltopdf-binary (0.12.3.1)
 
 PLATFORMS
   java
@@ -327,6 +335,8 @@ DEPENDENCIES
   tzinfo-data
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
+  wicked_pdf!
+  wkhtmltopdf-binary
 
 BUNDLED WITH
    1.15.4

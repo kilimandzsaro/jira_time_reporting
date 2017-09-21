@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170823145633) do
+ActiveRecord::Schema.define(version: 20170918132634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -106,12 +106,13 @@ ActiveRecord::Schema.define(version: 20170823145633) do
     t.integer  "jira_id_tag"
     t.string   "issue_key"
     t.string   "title"
-    t.boolean  "is_done",     default: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.boolean  "is_done",       default: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.string   "issue_type"
     t.datetime "done_date"
     t.integer  "project_id"
+    t.json     "issue_history"
     t.index ["jira_id_tag", "issue_key"], name: "index_issues_on_jira_id_tag_and_issue_key", unique: true, using: :btree
     t.index ["project_id"], name: "index_issues_on_project_id", using: :btree
   end
@@ -195,7 +196,7 @@ ActiveRecord::Schema.define(version: 20170823145633) do
 
   create_table "users", force: :cascade do |t|
     t.string   "username"
-    t.string   "email",                  default: "", null: false
+    t.string   "email"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "encrypted_password",     default: "", null: false

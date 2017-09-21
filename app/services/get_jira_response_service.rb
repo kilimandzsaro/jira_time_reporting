@@ -3,7 +3,7 @@ class GetJiraResponseService
   require 'json'
   
   include HTTParty
-  base_uri = GlobalSetting.find_by(active: true).url.any? ? GlobalSetting.find_by(active: true).url : "https://jirareporting.inbank.ee"
+  base_uri = !GlobalSetting.find_by(active: true).nil? ? GlobalSetting.find_by(active: true).url : "https://jirareporting.inbank.ee"
   default_params :output => 'json'
   format :json
 
